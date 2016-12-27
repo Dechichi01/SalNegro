@@ -46,7 +46,7 @@ public class CharacterAnimController : MonoBehaviour {
     public void Jump()
     {
         anim.SetTrigger("jump");
-        charMov.Jump();
+        //charMov.Jump();
     }
 	
 }
