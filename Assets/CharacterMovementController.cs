@@ -27,7 +27,7 @@ public class CharacterMovementController : MonoBehaviour {
     public float Move(Vector2 input)
     {
         float targetVelocityX = input.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, player.onGround ? accTimeGrounded : accTimeAir);
+        //velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, player.onGround ? accTimeGrounded : accTimeAir);
 
         charCtrl.Move(velocity * Time.deltaTime);
 

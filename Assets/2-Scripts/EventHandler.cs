@@ -4,27 +4,30 @@ using System.Collections;
 public class EventHandler : MonoBehaviour {
 
     Player player;
-    CharacterMovementController charMov;
+    Controller2D controller;
 
-    public LayerMask normalMask, invincibilityMask;
+    LayerMask maskInNormalState;
+    LayerMask maskInImmuneState;
 
     private void Start()
     {
         player = FindObjectOfType<Player>();
-        charMov = player.GetComponent<CharacterMovementController>();
+        controller = player.GetComponent<Controller2D>();
+        maskInImmuneState = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Wall"));
+        maskInNormalState = controller.collisionMask;
     }
 
 	public void ChangeToNormalState()
     {
         player.canPerformAction = true;
-        player.gameObject.layer = LayerMask.NameToLayer("Player");
-        charMov.useGravity = true;
+        player.useGravity = true;
+        controller.collisionMask = maskInNormalState;
     }
 
-    public void ChangeToActionState(bool immune)
+    public void ChangeToActionState(bool immune, bool useGravity)
     {        
         player.canPerformAction = false;
-        player.gameObject.layer = immune ? LayerMask.NameToLayer("PlayerInvincible") : LayerMask.NameToLayer("Player");
-        charMov.useGravity = false;
+        player.useGravity = useGravity;
+        controller.collisionMask = immune ? maskInImmuneState : maskInNormalState;
     }
 }

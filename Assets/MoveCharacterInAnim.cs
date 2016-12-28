@@ -10,12 +10,12 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
     float prevX, prevY;
     float x, y;
 
-    CharacterController charCtrl;
+    Controller2D controller;
     int sign;
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        charCtrl = FindObjectOfType<Player>().GetComponent<CharacterController>();
-        sign = charCtrl.GetComponent<Player>().facingRight?1:-1;
+        controller = FindObjectOfType<Player>().GetComponent<Controller2D>();
+        sign = controller.GetComponent<Player>().facingRight?1:-1;
         prevX = prevY = 0;       
 	}
 
@@ -24,7 +24,7 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
         x = movementCurveX.Evaluate(stateInfo.normalizedTime)*sign;
         y = movementCurveY.Evaluate(stateInfo.normalizedTime);
 
-        charCtrl.Move(new Vector3(x - prevX, y-prevY));
+        controller.Move(new Vector3(x - prevX, y-prevY));
 
         prevX = x;
         prevY = y;
