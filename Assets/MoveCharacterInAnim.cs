@@ -15,7 +15,7 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         controller = FindObjectOfType<Player>().GetComponent<Controller2D>();
-        sign = controller.GetComponent<Player>().facingRight?1:-1;
+        sign = controller.GetComponent<Player>().playerStates.facingRight ?1:-1;
         prevX = prevY = 0;       
 	}
 

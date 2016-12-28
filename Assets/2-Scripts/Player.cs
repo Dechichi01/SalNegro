@@ -15,13 +15,10 @@ public class Player : LivingEntity {
 
     public Transform groundCheck;
 
+    public PlayerStates playerStates;
     float gravity;
     float jumpVelocity;
 
-    public bool canPerformAction = true;
-    public bool facingRight = true;
-    public bool useGravity = true;
-    public bool grounded;
     const float skinWidth = .015f;
 
 
@@ -42,19 +39,20 @@ public class Player : LivingEntity {
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        playerStates = new PlayerStates();
     }
 
     private void Update()
     {
         for (int i = 0; i < inputManager.touchInputs.Length; i++)
         {
-            if (inputManager.touchInputs[i].pressed && canPerformAction)
+            if (inputManager.touchInputs[i].pressed && playerStates.canPerformAction)
                 ProcessTouch(inputManager.touchInputs[i].actionType);
         }
 
-        ProcessMovementInput();
+        if (!playerStates.canMove) moveInput = Vector2.zero;
 
-        moveInput = Vector2.zero; 
+        ProcessMovementInput();
     }
 
     void ProcessTouch(ActionType action)
@@ -68,20 +66,20 @@ public class Player : LivingEntity {
                 animControl.Roll();
                 break;
             case ActionType.Jump:
-                if (grounded)
+                if (playerStates.grounded)
                 {
                     animControl.SetAirState(timeToJumpApex);
                     moveInput.y = 1;
                 }
                 break;
             case ActionType.MoveRight:
-                if (!facingRight) animControl.Turn();
-                facingRight = true;
+                if (!playerStates.facingRight) animControl.Turn();
+                playerStates.facingRight = true;
                 moveInput.x = 1;
                 break;
             case ActionType.MoveLeft:
-                if (facingRight) animControl.Turn();
-                facingRight = false;
+                if (playerStates.facingRight) animControl.Turn();
+                playerStates.facingRight = false;
                 moveInput.x = -1;
                 break;
         }
@@ -89,21 +87,28 @@ public class Player : LivingEntity {
 
     void ProcessMovementInput()
     {
+        playerStates.grounded = controller.collisions.below;
+
         //Not accumulate gravity
         if (controller.collisions.above || controller.collisions.below)
             velocity.y = 0;
 
-        grounded = controller.collisions.below;
-
+        //Calculate velocity.x
         float targetVX = moveSpeed * moveInput.x;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, grounded?accTimeGround:accTimeAir);
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, playerStates.grounded ?accTimeGround:accTimeAir);
+
+        //Calculate velocity.y
         if (moveInput.y > 0)//Jump
             velocity.y = moveInput.y * jumpVelocity;
 
-        if (useGravity)
+        if (playerStates.useGravity)
             velocity.y += gravity * Time.deltaTime;
 
-        if (velocity.y < -5f) animControl.SetBoolOnMechanim("hardFall", true);
+        //Check hard fall
+        if (velocity.y < -11f) animControl.SetBoolOnMechanim("hardFall", true);
+
+        //Reset input
+        moveInput = Vector2.zero;
 
         animControl.Move(velocity*Time.deltaTime);
     }
@@ -112,4 +117,13 @@ public class Player : LivingEntity {
     {
         return Physics2D.Raycast(groundCheck.position, Vector3.down, 1.8f, controller.collisionMask);
     }
+}
+
+public class PlayerStates
+{
+    public bool canMove = true;
+    public bool canPerformAction = true;
+    public bool facingRight = true;
+    public bool useGravity = true;
+    public bool grounded;
 }

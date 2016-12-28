@@ -188,7 +188,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4637043
+      - time: 0.3532942
         functionName: ChangeToNormalState
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 17d2a7867d60bee4d8226f7f9f027b69,
