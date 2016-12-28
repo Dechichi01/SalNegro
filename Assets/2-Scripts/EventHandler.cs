@@ -20,14 +20,12 @@ public class EventHandler : MonoBehaviour {
 	public void ChangeToNormalState()
     {
         player.playerStates.canPerformAction = true;
-        player.playerStates.useGravity = true;
         controller.collisionMask = maskInNormalState;
     }
 
-    public void ChangeToActionState(bool immune, bool useGravity)
+    public void ChangeToActionState(bool immune)
     {        
         player.playerStates.canPerformAction = false;
-        player.playerStates.useGravity = useGravity;
         controller.collisionMask = immune ? maskInImmuneState : maskInNormalState;
     }
 }

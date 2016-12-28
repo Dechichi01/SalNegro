@@ -23,7 +23,7 @@ public class AnimController2D : MonoBehaviour {
     private void Update()
     {
         if (checkGround)
-            anim.SetBool("onAir", !player.CheckGround());
+            anim.SetBool("onAir", !(player.CheckGroundAnim() || player.playerStates.grounded));
     }
     public void Move(Vector2 velocity)
     {
@@ -33,13 +33,13 @@ public class AnimController2D : MonoBehaviour {
 
     public void Attack()
     {
-        eventHandler.ChangeToActionState(false, false);
+        eventHandler.ChangeToActionState(false);
         anim.SetTrigger("attack");
     }
 
     public void Roll()
     {
-        eventHandler.ChangeToActionState(true, false);
+        eventHandler.ChangeToActionState(true);
         anim.SetTrigger("roll");
     }
 

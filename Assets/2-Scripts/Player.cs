@@ -50,8 +50,6 @@ public class Player : LivingEntity {
                 ProcessTouch(inputManager.touchInputs[i].actionType);
         }
 
-        if (!playerStates.canMove) moveInput = Vector2.zero;
-
         ProcessMovementInput();
     }
 
@@ -60,10 +58,12 @@ public class Player : LivingEntity {
         switch (action)
         {
             case ActionType.Attack:
-                animControl.Attack();
+                if (playerStates.canAttack)
+                    animControl.Attack();
                 break;  
             case ActionType.Roll:
-                animControl.Roll();
+                if (playerStates.grounded)
+                    animControl.Roll();
                 break;
             case ActionType.Jump:
                 if (playerStates.grounded)
@@ -73,11 +73,15 @@ public class Player : LivingEntity {
                 }
                 break;
             case ActionType.MoveRight:
+                if (!playerStates.canMove) break;
+
                 if (!playerStates.facingRight) animControl.Turn();
                 playerStates.facingRight = true;
                 moveInput.x = 1;
                 break;
             case ActionType.MoveLeft:
+                if (!playerStates.canMove) break;
+
                 if (playerStates.facingRight) animControl.Turn();
                 playerStates.facingRight = false;
                 moveInput.x = -1;
@@ -101,8 +105,7 @@ public class Player : LivingEntity {
         if (moveInput.y > 0)//Jump
             velocity.y = moveInput.y * jumpVelocity;
 
-        if (playerStates.useGravity)
-            velocity.y += gravity * Time.deltaTime;
+        velocity.y += gravity * Time.deltaTime;
 
         //Check hard fall
         if (velocity.y < -11f) animControl.SetBoolOnMechanim("hardFall", true);
@@ -113,17 +116,25 @@ public class Player : LivingEntity {
         animControl.Move(velocity*Time.deltaTime);
     }
 
-    public bool CheckGround()
+    public bool CheckGroundAnim()
     {
         return Physics2D.Raycast(groundCheck.position, Vector3.down, 1.8f, controller.collisionMask);
     }
 }
 
+[System.Serializable]
 public class PlayerStates
 {
     public bool canMove = true;
+    public bool canAttack = true;
     public bool canPerformAction = true;
     public bool facingRight = true;
-    public bool useGravity = true;
     public bool grounded;
+
+    public void Copy(PlayerStates states)
+    {
+        canMove = states.canMove;
+        canAttack = states.canAttack;
+        canPerformAction = states.canPerformAction;
+    }
 }
