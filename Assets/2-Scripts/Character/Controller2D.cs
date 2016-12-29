@@ -21,7 +21,7 @@ public class Controller2D : RaycastController
         if (velocity.x != 0)
             HorizontalCollisions(ref velocity);
         if (velocity.y != 0)
-            VerticalCollisions(ref velocity);
+            VerticalCollisions(ref velocity, standingOnPlatform);
 
         if (standingOnPlatform) collisions.below = true;
         //Move player with the new velocity
@@ -49,7 +49,7 @@ public class Controller2D : RaycastController
 
             if (hit)
             {
-                if (hit.distance == 0) continue;//Don't bother if a object passes through
+                if (hit.distance == 0 || hit.collider.CompareTag("Platform")) continue;//Don't bother if a object passes through
 
                 //Check for slopes
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
@@ -76,7 +76,7 @@ public class Controller2D : RaycastController
         }
     }
 
-    void VerticalCollisions(ref Vector3 velocity)
+    void VerticalCollisions(ref Vector3 velocity, bool standingOnPlatform)
     {
         float directionY = Mathf.Sign(velocity.y);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth;
@@ -93,14 +93,20 @@ public class Controller2D : RaycastController
 
             if (hit)
             {
+                collisions.below = directionY == -1;
+                collisions.above = directionY == 1;
+
+                if (IgnoreCollision(hit, directionY, standingOnPlatform))
+                {
+                    velocity.y = 0;
+                    continue;
+                }
+
                 velocity.y = (hit.distance - skinWidth) * directionY;
                 rayLength = hit.distance;
 
                 if (collisions.climbingSlope)
                     velocity.x = Mathf.Sign(velocity.x) * Mathf.Abs(velocity.y) / Mathf.Tan(collisions.slopeAngle * Mathf.Deg2Rad);
-
-                collisions.below = directionY == -1;
-                collisions.above = directionY == 1;
             }
         }
 
@@ -182,6 +188,16 @@ public class Controller2D : RaycastController
 
     #endregion
 
+    bool IgnoreCollision(RaycastHit2D hit, float direction, bool standingOnPlatform)
+    {
+        if (hit.collider.CompareTag("Platform"))
+        {
+            if (direction == 1) return true;//Jumping and hitting a platform
+            if (hit.distance == 0 && !standingOnPlatform) return true;
+        }
+        Debug.Log(hit.collider.tag);
+        return false;
+    }
 }
 
 [System.Serializable]

@@ -6,6 +6,7 @@ public class PlatformController : RaycastController
 {
     public LayerMask passengerMask;
     public Vector3 move;
+    public bool checkHorizontalCollisions = false;
 
     List<PassengerMovement> passengerMovement;
     Dictionary<Transform, Controller2D> passengerDictionary = new Dictionary<Transform, Controller2D>();
@@ -58,12 +59,11 @@ public class PlatformController : RaycastController
 
             if (hit)
             {
-                if (!movedPassengers.Contains(hit.transform))
+                if (hit.distance > 0 && !movedPassengers.Contains(hit.transform))
                 {
                     movedPassengers.Add(hit.transform);
                     float pushX, pushY;
                     bool standingOnPlatform = hit.distance <= 2 * skinWidth;
-                    Debug.Log(standingOnPlatform);
                     pushX = standingOnPlatform ? velocity.x : 0;
                     pushY = standingOnPlatform ? velocity.y : (velocity.y - (hit.distance - skinWidth) * directionY);
 
@@ -73,7 +73,7 @@ public class PlatformController : RaycastController
         }
 
         //Check for players on the sides of platform and push them
-        if (velocity.x != 0)
+        if (checkHorizontalCollisions && velocity.x != 0)
         {
             rayLength = Mathf.Abs(velocity.x) + skinWidth;
 
