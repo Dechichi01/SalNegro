@@ -48,7 +48,7 @@ public class PlatformController : RaycastController
         float directionX = Mathf.Sign(velocity.x);
         float directionY = Mathf.Sign(velocity.y);
 
-        float rayLength = (directionY == 1) ? (Mathf.Abs(velocity.y) + skinWidth) : 2 * skinWidth;
+        float rayLength = Mathf.Clamp((Mathf.Abs(velocity.y) + skinWidth), 2 * skinWidth, float.MaxValue);
 
         //Check for players above platform and move them
         for (int i = 0; i < verticalRayCount; i++)
@@ -63,6 +63,7 @@ public class PlatformController : RaycastController
                     movedPassengers.Add(hit.transform);
                     float pushX, pushY;
                     bool standingOnPlatform = hit.distance <= 2 * skinWidth;
+                    Debug.Log(standingOnPlatform);
                     pushX = standingOnPlatform ? velocity.x : 0;
                     pushY = standingOnPlatform ? velocity.y : (velocity.y - (hit.distance - skinWidth) * directionY);
 
