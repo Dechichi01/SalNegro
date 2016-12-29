@@ -11,21 +11,19 @@ public class Controller2D : RaycastController
 
     public CollisionInfo collisions;
 
-    public Vector2 Move(Vector3 velocity)
+    public Vector2 Move(Vector3 velocity, bool standingOnPlatform = false)
     {
         UpdateRaycastOrigins();
         collisions.Reset(velocity);
-
         //Check Collisions
         if (velocity.y < 0)
             DescendSlope(ref velocity);
-
         if (velocity.x != 0)
             HorizontalCollisions(ref velocity);
-
         if (velocity.y != 0)
             VerticalCollisions(ref velocity);
 
+        if (standingOnPlatform) collisions.below = true;
         //Move player with the new velocity
         transform.Translate(velocity);
 
@@ -51,6 +49,8 @@ public class Controller2D : RaycastController
 
             if (hit)
             {
+                if (hit.distance == 0) continue;//Don't bother if a object passes through
+
                 //Check for slopes
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
                 if (i == 0 && slopeAngle <= maxClimbAngle)
@@ -184,6 +184,7 @@ public class Controller2D : RaycastController
 
 }
 
+[System.Serializable]
 public struct CollisionInfo
 {
     public bool above, below;
