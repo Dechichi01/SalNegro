@@ -28,7 +28,12 @@ public class AnimController2D : MonoBehaviour {
     public void Move(Vector2 velocity, Vector2 moveInput)
     {
         velocity = controller.Move(velocity, moveInput);
-        anim.SetFloat("horizontal", Mathf.Abs(velocity.x) / (player.moveSpeed*Time.deltaTime));
+
+        float moveSpeed = player.moveSpeed;
+        if (controller.collisions.climbingSlope || controller.collisions.descendingSlope)
+            moveSpeed *= Mathf.Cos(controller.collisions.slopeAngle * Mathf.Deg2Rad);
+
+        anim.SetFloat("horizontal", Mathf.Abs(velocity.x) / (moveSpeed*Time.deltaTime));
     }
 
     public void Attack()
