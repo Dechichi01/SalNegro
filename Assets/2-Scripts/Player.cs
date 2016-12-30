@@ -151,11 +151,17 @@ public class PlayerStates
 
     public bool useGravity = true;
 
+    public bool isRolling = false;
+    public bool isAttacking = false;
+
     public void Copy(PlayerStates states)
     {
         canMove = states.canMove;
         canAttack = states.canAttack;
         canPerformAction = states.canPerformAction;
         useGravity = states.useGravity;
+
+        isRolling = states.isRolling;
+        isAttacking = states.isAttacking;
     }
 }

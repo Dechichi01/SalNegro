@@ -11,7 +11,7 @@ public class Controller2D : RaycastController
     public CollisionInfo collisions;
 
     [HideInInspector]
-    public Vector2 playerInput;
+    public Vector2 moveInput;
 
     public Vector2 Move(Vector2 velocity, bool standingOnPlatform = false)
     {
@@ -23,7 +23,7 @@ public class Controller2D : RaycastController
         UpdateRaycastOrigins();
         collisions.Reset(velocity);
 
-        playerInput = moveInput;
+        this.moveInput = moveInput;
         //Check Collisions
         if (velocity.y < 0)
             DescendSlope(ref velocity);
