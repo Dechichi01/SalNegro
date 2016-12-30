@@ -39,7 +39,12 @@ public class AnimController2D : MonoBehaviour {
     public void Attack()
     {
         eventHandler.ChangeToActionState(false);
-        anim.SetTrigger("attack");
+        RaycastHit2D hit = Physics2D.Raycast(player.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
+        if (hit)
+        {
+            if (hit.distance > 0.8 * player.jumpHeight) anim.SetTrigger("airAttack");
+            else if (hit.distance == 0) anim.SetTrigger("attack");
+        }
     }
 
     public void Roll()
