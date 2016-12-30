@@ -85,7 +85,7 @@ public class PlatformController : RaycastController
                     bool standingOnPlatform = hit.distance <= 2 * skinWidth;
                     pushX = standingOnPlatform ? velocity.x : 0;
                     pushY = standingOnPlatform ? velocity.y : (velocity.y - (hit.distance - skinWidth) * directionY);
-
+                    Debug.Log(standingOnPlatform);
                     passengerMovement.Add(new PassengerMovement(hit.transform, new Vector3(pushX, pushY), standingOnPlatform, directionY == 1));
                 }
             }

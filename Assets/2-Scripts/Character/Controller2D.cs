@@ -93,15 +93,10 @@ public class Controller2D : RaycastController
 
             if (hit)
             {
+                if (IgnoreCollision(ref velocity, hit, directionY, standingOnPlatform)) continue;
+
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
-
-                if (IgnoreCollision(hit, directionY, standingOnPlatform))
-                {
-                    velocity.y = 0;
-                    continue;
-                }
-
                 velocity.y = (hit.distance - skinWidth) * directionY;
                 rayLength = hit.distance;
 
@@ -188,12 +183,16 @@ public class Controller2D : RaycastController
 
     #endregion
 
-    bool IgnoreCollision(RaycastHit2D hit, float direction, bool standingOnPlatform)
+    bool IgnoreCollision(ref Vector3 velocity, RaycastHit2D hit, float direction, bool standingOnPlatform)
     {
         if (hit.collider.CompareTag("Platform"))
         {
             if (direction == 1) return true;//Jumping and hitting a platform
-            if (hit.distance == 0 && !standingOnPlatform) return true;
+            if (hit.distance <= skinWidth && !standingOnPlatform)
+            {
+                velocity.y = 0;
+                return true;
+            }
         }
         Debug.Log(hit.collider.tag);
         return false;
