@@ -1,32 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ChangePlayerStateOnEnter : StateMachineBehaviour {
+public class AnimFallAttack : StateMachineBehaviour {
 
-    Player player;
-    public PlayerStates states;
-    public bool revert = false;
-    [Range(0, 1)]
-    public float revertTime = 1;
-    PlayerStates previousStates;
-    
-	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        player = FindObjectOfType<Player>();
-        previousStates = new PlayerStates();
-        previousStates.Copy(player.playerStates);
-        player.playerStates.Copy(states);
+    [Range(0,1)]
+    public float startFallTime = 1;
+
+    Controller2D controller;
+
+    public float fallSpeed = 7f;
+    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        controller = FindObjectOfType<Controller2D>();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (revert && stateInfo.normalizedTime > revertTime) player.playerStates.Copy(previousStates);
-	}
+	    if (stateInfo.normalizedTime > startFallTime)
+            controller.Move(new Vector2(0, -fallSpeed * Time.deltaTime));
+    }
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	//
-	//}
+    //}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

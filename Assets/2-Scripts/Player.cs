@@ -122,7 +122,8 @@ public class Player : LivingEntity {
                 velocity.y = moveInput.y * jumpVelocity;
         }
 
-        velocity.y += gravity * Time.deltaTime;
+        if (playerStates.useGravity)
+            velocity.y += gravity * Time.deltaTime;
 
         //Check hard fall
         if (velocity.y < -11f) animControl.SetBoolOnMechanim("hardFall", true);
@@ -148,10 +149,13 @@ public class PlayerStates
     public bool facingRight = true;
     public bool grounded;
 
+    public bool useGravity = true;
+
     public void Copy(PlayerStates states)
     {
         canMove = states.canMove;
         canAttack = states.canAttack;
         canPerformAction = states.canPerformAction;
+        useGravity = states.useGravity;
     }
 }
