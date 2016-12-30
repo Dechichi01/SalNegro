@@ -28,6 +28,7 @@ public class Player : LivingEntity {
 
     //Movement related variables
     Vector2 moveInput, velocity;
+
     float velocityXSmooth;
 
     protected override void Start()
@@ -126,10 +127,10 @@ public class Player : LivingEntity {
         //Check hard fall
         if (velocity.y < -11f) animControl.SetBoolOnMechanim("hardFall", true);
 
+        animControl.Move(velocity * Time.deltaTime, moveInput);
         //Reset input
         moveInput = Vector2.zero;
 
-        animControl.Move(velocity*Time.deltaTime);
     }
 
     public bool CheckGroundAnim()

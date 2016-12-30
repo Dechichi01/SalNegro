@@ -25,9 +25,9 @@ public class AnimController2D : MonoBehaviour {
         if (checkGround)
             anim.SetBool("onAir", !(player.CheckGroundAnim() || player.playerStates.grounded));
     }
-    public void Move(Vector2 velocity)
+    public void Move(Vector2 velocity, Vector2 moveInput)
     {
-        velocity = controller.Move(velocity);
+        velocity = controller.Move(velocity, moveInput);
         anim.SetFloat("horizontal", Mathf.Abs(velocity.x) / (player.moveSpeed*Time.deltaTime));
     }
 
