@@ -108,7 +108,18 @@ public class Player : LivingEntity {
 
         //Calculate velocity.y
         if (moveInput.y > 0)//Jump
-            velocity.y = moveInput.y * jumpVelocity;
+        {
+            if (controller.collisions.slidingDownMaxSlope)
+            {
+                if (moveInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))//not jumping againt max slope
+                {
+                    velocity.y = jumpVelocity * controller.collisions.slopeNormal.y;
+                    velocity.x = jumpVelocity * controller.collisions.slopeNormal.x;
+                }
+            }
+            else
+                velocity.y = moveInput.y * jumpVelocity;
+        }
 
         velocity.y += gravity * Time.deltaTime;
 
