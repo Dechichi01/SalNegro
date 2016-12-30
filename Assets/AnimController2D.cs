@@ -56,6 +56,12 @@ public class AnimController2D : MonoBehaviour {
         transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
     }
 
+    public void Jump(float timeToJumpApex)
+    {
+        anim.SetTrigger("jump");
+        SetAirState(timeToJumpApex);
+    }
+
     public void SetAirState(float time)
     {
         anim.SetBool("onAir", true);

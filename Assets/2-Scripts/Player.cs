@@ -69,7 +69,7 @@ public class Player : LivingEntity {
             case ActionType.Jump:
                 if (playerStates.grounded)
                 {
-                    animControl.SetAirState(timeToJumpApex);
+                    animControl.Jump(timeToJumpApex);
                     moveInput.y = 1;
                 }
                 break;
@@ -135,7 +135,7 @@ public class Player : LivingEntity {
 
     public bool CheckGroundAnim()
     {
-        return Physics2D.Raycast(groundCheck.position, Vector3.down, 1.8f, controller.collisionMask);
+        return Physics2D.Raycast(groundCheck.position, Vector3.down, 1f, controller.collisionMask);
     }
 }
 
