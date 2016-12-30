@@ -56,7 +56,7 @@ public class Controller2D : RaycastController
                 {
                     //Are we climbing a new slope and didn't get there yet?
                     if (slopeAngle != collisions.slopeAngle && hit.distance > skinWidth)
-                        ClimbSlope(ref velocity, slopeAngle);
+                        ClimbSlope(ref velocity, slopeAngle, hit.normal);
                 }
                 
                 //Not climbing slope or hitting and obstacle            
@@ -120,6 +120,7 @@ public class Controller2D : RaycastController
                 {
                     velocity.x = (hit.distance - skinWidth) * directionX;
                     collisions.slopeAngle = slopeAngle;
+                    collisions.slopeNormal = hit.normal;
                 }
             }
         }
@@ -127,7 +128,7 @@ public class Controller2D : RaycastController
     #endregion
 
     #region Slopes
-    void ClimbSlope(ref Vector2 velocity, float slopeAngle)
+    void ClimbSlope(ref Vector2 velocity, float slopeAngle, Vector2 slopeNormal)
     {
         if (collisions.descendingSlope)
         {
@@ -146,6 +147,7 @@ public class Controller2D : RaycastController
             collisions.below = true;//since we're climbing a slope
             collisions.climbingSlope = true;
             collisions.slopeAngle = slopeAngle;
+            collisions.slopeNormal = slopeNormal;
         }
     }
 
@@ -185,6 +187,7 @@ public class Controller2D : RaycastController
                         collisions.slopeAngle = slopeAngle;
                         collisions.descendingSlope = true;
                         collisions.below = true;
+                        collisions.slopeNormal = hit.normal;
                     }
                 }
             }
@@ -203,7 +206,7 @@ public class Controller2D : RaycastController
 
                 collisions.slopeAngle = slopeAngle;
                 collisions.slidingDownMaxSlope = true;
-                //collisions.slopeNormal = hit.normal;
+                collisions.slopeNormal = hit.normal;
             }
         }
 
@@ -222,7 +225,6 @@ public class Controller2D : RaycastController
                 return true;
             }
         }
-        Debug.Log(hit.collider.tag);
         return false;
     }
 }
@@ -239,7 +241,8 @@ public struct CollisionInfo
 
     public float slopeAngle, slopeAngleOld;
 
-    public Vector3 velocityOld;
+    public Vector2 slopeNormal;
+    public Vector2 velocityOld;
 
     public void Reset(Vector3 oldVelocity)
     {
@@ -248,6 +251,7 @@ public struct CollisionInfo
         climbingSlope = false;
         descendingSlope = false;
         slidingDownMaxSlope = false;
+        slopeNormal = Vector2.zero;
 
         slopeAngleOld = slopeAngle;
         slopeAngle = 0;

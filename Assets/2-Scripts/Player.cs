@@ -96,7 +96,9 @@ public class Player : LivingEntity {
         //Not accumulate gravity
         if (controller.collisions.above || controller.collisions.below)
         {
-            if (!controller.collisions.slidingDownMaxSlope)
+            if (controller.collisions.slidingDownMaxSlope)
+                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
+            else
                 velocity.y = 0;
         }
 
