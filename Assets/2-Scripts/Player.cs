@@ -95,7 +95,10 @@ public class Player : LivingEntity {
 
         //Not accumulate gravity
         if (controller.collisions.above || controller.collisions.below)
-            velocity.y = 0;
+        {
+            if (!controller.collisions.slidingDownMaxSlope)
+                velocity.y = 0;
+        }
 
         //Calculate velocity.x
         float targetVX = moveSpeed * moveInput.x;
