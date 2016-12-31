@@ -291,7 +291,7 @@ public class Controller2D : RaycastController
         if (states.useGravity)
             velocity.y += gravity * Time.deltaTime;
 
-        return velocity;
+        return velocity*Time.deltaTime;
     }
 
     public bool CheckGroundAnim()

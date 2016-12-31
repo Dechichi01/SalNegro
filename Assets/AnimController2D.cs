@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(Controller2D))]
 public class AnimController2D : MonoBehaviour {
 
-    Player player;
     Controller2D controller;
     EventHandler eventHandler;
 
@@ -16,14 +15,13 @@ public class AnimController2D : MonoBehaviour {
     {
         controller = GetComponent<Controller2D>();
         anim = GetComponentInChildren<Animator>();
-        player = (Player) GetComponent<LivingEntity>();
         eventHandler = FindObjectOfType<EventHandler>();
     }
 
     private void Update()
     {
         if (checkGround)
-            anim.SetBool("onAir", !(controller.CheckGroundAnim() || player.states.grounded));
+            anim.SetBool("onAir", !(controller.CheckGroundAnim() || controller.collisions.below));
     }
     public void Move(Vector2 velocity)
     {

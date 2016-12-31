@@ -12,8 +12,6 @@ public class Player : LivingEntity {
     //Movement related variables
     Vector2 moveInput;
 
-    float velocityXSmooth;
-
     protected override void Start()
     {
         base.Start();
@@ -30,7 +28,7 @@ public class Player : LivingEntity {
                 ProcessTouch(inputManager.touchInputs[i].actionType);
         }
 
-        animControl.Move(controller.ProcessMovementInput(moveInput, states) *Time.deltaTime);
+        animControl.Move(controller.ProcessMovementInput(moveInput, states));
         moveInput = Vector2.zero;
     }
 
