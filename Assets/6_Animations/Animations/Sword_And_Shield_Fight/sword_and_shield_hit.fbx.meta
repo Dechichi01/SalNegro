@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 2bc339db00f02a44eb01da829671610e
-timeCreated: 1483097390
+guid: 27e8dd6a544e8094a973dcd3be44f18d
+timeCreated: 1483125786
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -141,8 +141,8 @@ ModelImporter:
     400130: Spine2
     400132: //RootNode
     400134: Sword_joint
-    7400000: slash_air_heavy_getting_up
-    7400002: slash_air_heavy
+    7400000: hit_hard
+    7400002: hit_hard_thrown
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -166,10 +166,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: slash_air_heavy
+      name: hit_hard
       takeName: Take 001
-      firstFrame: 8
-      lastFrame: 76
+      firstFrame: 6
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,13 +327,13 @@ ModelImporter:
       - path: Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand/Sword_joint
         weight: 1
       maskType: 0
-      maskSource: {fileID: 101100000, guid: 8299253fc955822419f79f9262e23761, type: 2}
+      maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: slash_air_heavy_getting_up
+      name: hit_hard_thrown
       takeName: Take 001
-      firstFrame: 76
-      lastFrame: 92
+      firstFrame: 20
+      lastFrame: 48
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -491,7 +491,7 @@ ModelImporter:
       - path: Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand/Sword_joint
         weight: 1
       maskType: 0
-      maskSource: {fileID: 101100000, guid: 8299253fc955822419f79f9262e23761, type: 2}
+      maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:

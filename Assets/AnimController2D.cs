@@ -16,20 +16,24 @@ public class AnimController2D : MonoBehaviour {
     {
         controller = GetComponent<Controller2D>();
         anim = GetComponentInChildren<Animator>();
-        player = GetComponent<Player>();
+        player = (Player) GetComponent<LivingEntity>();
         eventHandler = FindObjectOfType<EventHandler>();
     }
 
     private void Update()
     {
         if (checkGround)
-            anim.SetBool("onAir", !(player.CheckGroundAnim() || player.playerStates.grounded));
+            anim.SetBool("onAir", !(controller.CheckGroundAnim() || player.states.grounded));
     }
-    public void Move(Vector2 velocity, Vector2 moveInput)
+    public void Move(Vector2 velocity)
     {
-        velocity = controller.Move(velocity, moveInput);
+        //Check hard fall
+        if (velocity.y < -11f) anim.SetBool("hardFall", true);
 
-        float moveSpeed = player.moveSpeed;
+        velocity = controller.Move(velocity);
+
+        //Calculate horizontal movement percentage
+        float moveSpeed = controller.moveSpeed;
         if (controller.collisions.climbingSlope || controller.collisions.descendingSlope)
             moveSpeed *= Mathf.Cos(controller.collisions.slopeAngle * Mathf.Deg2Rad);
 
@@ -39,7 +43,12 @@ public class AnimController2D : MonoBehaviour {
     public void Attack()
     {
         eventHandler.ChangeToActionState(false);
-        anim.SetTrigger("attack");
+        RaycastHit2D hit = Physics2D.Raycast(controller.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
+        if (hit)
+        {
+            if (hit.distance > 0.8 * controller.jumpHeight) anim.SetTrigger("airAttack");
+            else if (hit.distance == 0) anim.SetTrigger("attack");
+        }
     }
 
     public void Roll()
@@ -54,6 +63,12 @@ public class AnimController2D : MonoBehaviour {
         //anim.SetTrigger("turn");
         Vector3 rot = transform.GetChild(0).rotation.eulerAngles;
         transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
+    }
+
+    public void Jump(float timeToJumpApex)
+    {
+        anim.SetTrigger("jump");
+        SetAirState(timeToJumpApex);
     }
 
     public void SetAirState(float time)

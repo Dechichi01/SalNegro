@@ -1,35 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveCharacterInAnim : StateMachineBehaviour {
+public class ChangeStatesOnEnter : StateMachineBehaviour {
 
-    //Assigned in the inspector
-    public AnimationCurve movementCurveX;
-    public AnimationCurve movementCurveY;
-
-    float prevX, prevY;
-    float x, y;
-
-    Controller2D controller;
-    int sign;
+    LivingEntity entity;
+    public LivingEntityStates states;
+    public bool revert = false;
+    [Range(0, 1)]
+    public float revertTime = 1;
+    LivingEntityStates previousStates;
+    
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        controller = animator.GetComponentInParent<Controller2D>();
-        sign = controller.GetComponent<LivingEntity>().states.facingRight ?1:-1;
-        Debug.Log(controller.GetComponent<LivingEntity>().name + ", " + controller.GetComponent<LivingEntity>().states.facingRight);
-        prevX = prevY = 0;       
+        entity = animator.GetComponentInParent<LivingEntity>();
+        previousStates = new LivingEntityStates();
+        previousStates.Copy(entity.states);
+        entity.states.Copy(states);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("ok");
-        x = movementCurveX.Evaluate(stateInfo.normalizedTime)*sign;
-        y = movementCurveY.Evaluate(stateInfo.normalizedTime);
-
-        controller.Move(new Vector3(x - prevX, y-prevY));
-
-        prevX = x;
-        prevY = y;
+        if (revert && stateInfo.normalizedTime > revertTime) entity.states.Copy(previousStates);
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

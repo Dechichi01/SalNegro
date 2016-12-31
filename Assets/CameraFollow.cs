@@ -21,9 +21,12 @@ public class CameraFollow : MonoBehaviour {
 
     bool lookAheadStopped;
 
+    Player player;
+
     void Start()
     {
         focusArea = new FocusArea(target.coll.bounds, focusAreaSize);
+        player = target.GetComponent<Player>();
     }
 
     void LateUpdate()
@@ -35,7 +38,8 @@ public class CameraFollow : MonoBehaviour {
         if (focusArea.velocity.x != 0)
         {
             lookAheadDirX = Mathf.Sign(focusArea.velocity.x);
-            if (Mathf.Sign(target.playerInput.x) == Mathf.Sign(focusArea.velocity.x) && target.playerInput.x != 0)
+            if (player.states.isRolling || player.states.isAttacking || 
+                (Mathf.Sign(target.moveInput.x) == Mathf.Sign(focusArea.velocity.x) && target.moveInput.x != 0))
             {
                 lookAheadStopped = false;
                 targetLookAheadX = lookAheadDirX * lookAheadDstX;
