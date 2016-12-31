@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ChangePlayerStateOnEnter : StateMachineBehaviour {
+public class ChangeStatesOnEnter : StateMachineBehaviour {
 
-    Player player;
+    LivingEntity entity;
     public LivingEntityStates states;
     public bool revert = false;
     [Range(0, 1)]
@@ -12,15 +12,15 @@ public class ChangePlayerStateOnEnter : StateMachineBehaviour {
     
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        player = FindObjectOfType<Player>();
+        entity = animator.GetComponentInParent<LivingEntity>();
         previousStates = new LivingEntityStates();
-        previousStates.Copy(player.states);
-        player.states.Copy(states);
+        previousStates.Copy(entity.states);
+        entity.states.Copy(states);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (revert && stateInfo.normalizedTime > revertTime) player.states.Copy(previousStates);
+        if (revert && stateInfo.normalizedTime > revertTime) entity.states.Copy(previousStates);
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
