@@ -11,7 +11,7 @@ public class AnimFallAttack : StateMachineBehaviour {
     public float fallSpeed = 7f;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        controller = FindObjectOfType<Controller2D>();
+        controller = animator.GetComponentInParent<Controller2D>();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
