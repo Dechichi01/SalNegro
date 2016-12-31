@@ -23,13 +23,17 @@ public class AnimController2D : MonoBehaviour {
     private void Update()
     {
         if (checkGround)
-            anim.SetBool("onAir", !(player.CheckGroundAnim() || player.states.grounded));
+            anim.SetBool("onAir", !(controller.CheckGroundAnim() || player.states.grounded));
     }
-    public void Move(Vector2 velocity, Vector2 moveInput)
+    public void Move(Vector2 velocity)
     {
-        velocity = controller.Move(velocity, moveInput);
+        //Check hard fall
+        if (velocity.y < -11f) anim.SetBool("hardFall", true);
 
-        float moveSpeed = player.moveSpeed;
+        velocity = controller.Move(velocity);
+
+        //Calculate horizontal movement percentage
+        float moveSpeed = controller.moveSpeed;
         if (controller.collisions.climbingSlope || controller.collisions.descendingSlope)
             moveSpeed *= Mathf.Cos(controller.collisions.slopeAngle * Mathf.Deg2Rad);
 
@@ -39,10 +43,10 @@ public class AnimController2D : MonoBehaviour {
     public void Attack()
     {
         eventHandler.ChangeToActionState(false);
-        RaycastHit2D hit = Physics2D.Raycast(player.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
+        RaycastHit2D hit = Physics2D.Raycast(controller.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
         if (hit)
         {
-            if (hit.distance > 0.8 * player.jumpHeight) anim.SetTrigger("airAttack");
+            if (hit.distance > 0.8 * controller.jumpHeight) anim.SetTrigger("airAttack");
             else if (hit.distance == 0) anim.SetTrigger("attack");
         }
     }

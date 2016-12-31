@@ -5,25 +5,41 @@ public class Controller2D : RaycastController
 {
     //Assigned in the inspector
     public LayerMask collisionMask;
-
     public float maxSlopeAngle = 50f;
+    //Movement related variables
+    public float moveSpeed = 7f;
+    public float accTimeGround = .1f;
+    public float accTimeAir = .2f;
+
+    public float jumpHeight = 3.5f;
+    public float timeToJumpApex = .6f;
+
+    float gravity;
+    float jumpVelocity;
+    //
+
+    Vector2 velocity;
+    float velocityXSmooth;
+
+    public Transform groundCheck;
 
     public CollisionInfo collisions;
 
     [HideInInspector]
     public Vector2 moveInput;
 
-    public Vector2 Move(Vector2 velocity, bool standingOnPlatform = false)
+    protected override void Start()
     {
-        return Move(velocity, Vector2.zero, standingOnPlatform);
+        base.Start();
+        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
     }
 
-    public Vector2 Move(Vector2 velocity, Vector2 moveInput, bool standingOnPlatform = false)
+    public Vector2 Move(Vector2 velocity, bool standingOnPlatform = false)
     {
         UpdateRaycastOrigins();
         collisions.Reset(velocity);
 
-        this.moveInput = moveInput;
         //Check Collisions
         if (velocity.y < 0)
             DescendSlope(ref velocity);
@@ -135,6 +151,20 @@ public class Controller2D : RaycastController
             }
         }
     }
+
+    bool IgnoreCollision(ref Vector2 velocity, RaycastHit2D hit, float direction, bool standingOnPlatform)
+    {
+        if (hit.collider.CompareTag("Platform"))
+        {
+            if (direction == 1) return true;//Jumping and hitting a platform
+            if (hit.distance <= skinWidth && !standingOnPlatform)
+            {
+                velocity.y = 0;
+                return true;
+            }
+        }
+        return false;
+    }
     #endregion
 
     #region Slopes
@@ -224,18 +254,49 @@ public class Controller2D : RaycastController
 
     #endregion
 
-    bool IgnoreCollision(ref Vector2 velocity, RaycastHit2D hit, float direction, bool standingOnPlatform)
+    public Vector2 ProcessMovementInput(Vector2 _moveInput, LivingEntityStates states)
     {
-        if (hit.collider.CompareTag("Platform"))
+        moveInput = _moveInput;
+
+        states.grounded = collisions.below;
+
+        //Not accumulate gravity
+        if (collisions.above || collisions.below)
         {
-            if (direction == 1) return true;//Jumping and hitting a platform
-            if (hit.distance <= skinWidth && !standingOnPlatform)
-            {
+            if (collisions.slidingDownMaxSlope)
+                velocity.y += collisions.slopeNormal.y * -gravity * Time.deltaTime;
+            else
                 velocity.y = 0;
-                return true;
-            }
         }
-        return false;
+
+        //Calculate velocity.x
+        float targetVX = moveSpeed * moveInput.x;
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, states.grounded ? accTimeGround : accTimeAir);
+
+        //Calculate velocity.y
+        if (moveInput.y > 0)//Jump
+        {
+            if (collisions.slidingDownMaxSlope)
+            {
+                if (moveInput.x != -Mathf.Sign(collisions.slopeNormal.x))//not jumping againt max slope
+                {
+                    velocity.y = jumpVelocity * collisions.slopeNormal.y;
+                    velocity.x = jumpVelocity * collisions.slopeNormal.x;
+                }
+            }
+            else
+                velocity.y = moveInput.y * jumpVelocity;
+        }
+
+        if (states.useGravity)
+            velocity.y += gravity * Time.deltaTime;
+
+        return velocity;
+    }
+
+    public bool CheckGroundAnim()
+    {
+        return Physics2D.Raycast(groundCheck.position, Vector3.down, 1f, collisionMask);
     }
 }
 
