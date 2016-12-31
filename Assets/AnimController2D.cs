@@ -16,14 +16,14 @@ public class AnimController2D : MonoBehaviour {
     {
         controller = GetComponent<Controller2D>();
         anim = GetComponentInChildren<Animator>();
-        player = GetComponent<Player>();
+        player = (Player) GetComponent<LivingEntity>();
         eventHandler = FindObjectOfType<EventHandler>();
     }
 
     private void Update()
     {
         if (checkGround)
-            anim.SetBool("onAir", !(player.CheckGroundAnim() || player.playerStates.grounded));
+            anim.SetBool("onAir", !(player.CheckGroundAnim() || player.states.grounded));
     }
     public void Move(Vector2 velocity, Vector2 moveInput)
     {

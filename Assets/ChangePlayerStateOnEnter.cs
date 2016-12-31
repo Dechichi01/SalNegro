@@ -4,23 +4,23 @@ using System.Collections;
 public class ChangePlayerStateOnEnter : StateMachineBehaviour {
 
     Player player;
-    public PlayerStates states;
+    public LivingEntityStates states;
     public bool revert = false;
     [Range(0, 1)]
     public float revertTime = 1;
-    PlayerStates previousStates;
+    LivingEntityStates previousStates;
     
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         player = FindObjectOfType<Player>();
-        previousStates = new PlayerStates();
-        previousStates.Copy(player.playerStates);
-        player.playerStates.Copy(states);
+        previousStates = new LivingEntityStates();
+        previousStates.Copy(player.states);
+        player.states.Copy(states);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (revert && stateInfo.normalizedTime > revertTime) player.playerStates.Copy(previousStates);
+        if (revert && stateInfo.normalizedTime > revertTime) player.states.Copy(previousStates);
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

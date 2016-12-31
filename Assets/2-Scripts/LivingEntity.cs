@@ -3,14 +3,17 @@ using System.Collections;
 
 public class LivingEntity : MonoBehaviour, IDamageable
 {
-
     public float startingHealth;
     public float health { get; protected set; }
     protected bool dead;
+
+    public LivingEntityStates states;
+
     public event System.Action OnDeath;
 
     protected virtual void Start()
     {
+        states = new LivingEntityStates();
         health = startingHealth;
     }
 
@@ -42,5 +45,31 @@ public class LivingEntity : MonoBehaviour, IDamageable
         }
         Destroy(gameObject);
 
+    }
+}
+
+[System.Serializable]
+public class LivingEntityStates
+{
+    public bool canMove = true;
+    public bool canAttack = true;
+    public bool canPerformAction = true;
+    public bool facingRight = true;
+    public bool grounded;
+
+    public bool useGravity = true;
+
+    public bool isRolling = false;
+    public bool isAttacking = false;
+
+    public void Copy(LivingEntityStates states)
+    {
+        canMove = states.canMove;
+        canAttack = states.canAttack;
+        canPerformAction = states.canPerformAction;
+        useGravity = states.useGravity;
+
+        isRolling = states.isRolling;
+        isAttacking = states.isAttacking;
     }
 }

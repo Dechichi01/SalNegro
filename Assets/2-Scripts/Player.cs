@@ -15,7 +15,6 @@ public class Player : LivingEntity {
 
     public Transform groundCheck;
 
-    public PlayerStates playerStates;
     float gravity;
     float jumpVelocity;
 
@@ -40,14 +39,13 @@ public class Player : LivingEntity {
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        playerStates = new PlayerStates();
     }
 
     private void Update()
     {
         for (int i = 0; i < inputManager.touchInputs.Length; i++)
         {
-            if (inputManager.touchInputs[i].pressed && playerStates.canPerformAction)
+            if (inputManager.touchInputs[i].pressed && states.canPerformAction)
                 ProcessTouch(inputManager.touchInputs[i].actionType);
         }
 
@@ -59,32 +57,32 @@ public class Player : LivingEntity {
         switch (action)
         {
             case ActionType.Attack:
-                if (playerStates.canAttack)
+                if (states.canAttack)
                     animControl.Attack();
                 break;  
             case ActionType.Roll:
-                if (playerStates.grounded)
+                if (states.grounded)
                     animControl.Roll();
                 break;
             case ActionType.Jump:
-                if (playerStates.grounded)
+                if (states.grounded)
                 {
                     animControl.Jump(timeToJumpApex);
                     moveInput.y = 1;
                 }
                 break;
             case ActionType.MoveRight:
-                if (!playerStates.canMove) break;
+                if (!states.canMove) break;
 
-                if (!playerStates.facingRight) animControl.Turn();
-                playerStates.facingRight = true;
+                if (!states.facingRight) animControl.Turn();
+                states.facingRight = true;
                 moveInput.x = 1;
                 break;
             case ActionType.MoveLeft:
-                if (!playerStates.canMove) break;
+                if (!states.canMove) break;
 
-                if (playerStates.facingRight) animControl.Turn();
-                playerStates.facingRight = false;
+                if (states.facingRight) animControl.Turn();
+                states.facingRight = false;
                 moveInput.x = -1;
                 break;
         }
@@ -92,7 +90,7 @@ public class Player : LivingEntity {
 
     void ProcessMovementInput()
     {
-        playerStates.grounded = controller.collisions.below;
+        states.grounded = controller.collisions.below;
 
         //Not accumulate gravity
         if (controller.collisions.above || controller.collisions.below)
@@ -105,7 +103,7 @@ public class Player : LivingEntity {
 
         //Calculate velocity.x
         float targetVX = moveSpeed * moveInput.x;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, playerStates.grounded ?accTimeGround:accTimeAir);
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, states.grounded ?accTimeGround:accTimeAir);
 
         //Calculate velocity.y
         if (moveInput.y > 0)//Jump
@@ -122,7 +120,7 @@ public class Player : LivingEntity {
                 velocity.y = moveInput.y * jumpVelocity;
         }
 
-        if (playerStates.useGravity)
+        if (states.useGravity)
             velocity.y += gravity * Time.deltaTime;
 
         //Check hard fall
@@ -140,28 +138,3 @@ public class Player : LivingEntity {
     }
 }
 
-[System.Serializable]
-public class PlayerStates
-{
-    public bool canMove = true;
-    public bool canAttack = true;
-    public bool canPerformAction = true;
-    public bool facingRight = true;
-    public bool grounded;
-
-    public bool useGravity = true;
-
-    public bool isRolling = false;
-    public bool isAttacking = false;
-
-    public void Copy(PlayerStates states)
-    {
-        canMove = states.canMove;
-        canAttack = states.canAttack;
-        canPerformAction = states.canPerformAction;
-        useGravity = states.useGravity;
-
-        isRolling = states.isRolling;
-        isAttacking = states.isAttacking;
-    }
-}

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 55b0d56f11b2b6941ba40c050168d044
-timeCreated: 1483117107
+guid: a0eedbea06eeef7439840e8158c6cd6d
+timeCreated: 1483124225
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -121,10 +121,10 @@ ModelImporter:
     400110: mixamorig:Spine1
     400112: mixamorig:Spine2
     400114: //RootNode
-    7400000: standing_walk_back
+    7400000: zombie_reaction_hit
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -145,17 +145,17 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: standing_walk_back
+      name: zombie_reaction_hit
       takeName: mixamo.com
-      firstFrame: 0
-      lastFrame: 41
+      firstFrame: 7
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -311,7 +311,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
@@ -324,8 +324,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1ff8beae34033ff478c699570bd73ad3,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

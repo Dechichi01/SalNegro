@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 866a0d44bf63b1a44b09b28cd2db820c
-timeCreated: 1483117107
+guid: 737ed40fca590744b9703d878225487e
+timeCreated: 1483124225
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -122,10 +122,9 @@ ModelImporter:
     400112: mixamorig:Spine2
     400114: //RootNode
     7400000: mixamo.com
-    7400002: Take 001
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -168,7 +167,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
@@ -181,8 +180,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1ff8beae34033ff478c699570bd73ad3,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

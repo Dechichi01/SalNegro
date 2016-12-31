@@ -38,7 +38,7 @@ public class CameraFollow : MonoBehaviour {
         if (focusArea.velocity.x != 0)
         {
             lookAheadDirX = Mathf.Sign(focusArea.velocity.x);
-            if (player.playerStates.isRolling || player.playerStates.isAttacking || 
+            if (player.states.isRolling || player.states.isAttacking || 
                 (Mathf.Sign(target.moveInput.x) == Mathf.Sign(focusArea.velocity.x) && target.moveInput.x != 0))
             {
                 lookAheadStopped = false;

@@ -65,6 +65,7 @@ ModelImporter:
     100114: mixamorig:Spine1
     100116: mixamorig:Spine2
     100118: //RootNode
+    100120: 1
     400000: default
     400002: FBXASC049
     400004: mixamorig:Head
@@ -125,13 +126,17 @@ ModelImporter:
     400114: mixamorig:Spine1
     400116: mixamorig:Spine2
     400118: //RootNode
+    400120: 1
     2300000: default
     3300000: default
     4300000: default
     4300002: FBXASC049
+    4300004: 1
     7400000: mixamo.com
+    7400002: Take 001
     9500000: //RootNode
     13700000: FBXASC049
+    13700002: 1
   materials:
     importMaterials: 1
     materialName: 0
