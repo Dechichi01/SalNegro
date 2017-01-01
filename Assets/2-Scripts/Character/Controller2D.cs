@@ -291,6 +291,7 @@ public class Controller2D : RaycastController
         if (states.useGravity)
             velocity.y += gravity * Time.deltaTime;
 
+  
         return velocity*Time.deltaTime;
     }
 

@@ -9,6 +9,10 @@ using System.Collections;
 [RequireComponent(typeof(AnimController2D))]
 public class AIEnemy : LivingEntity {
 
+    //Assigned in the inspectos
+    public bool followTarget;
+    public float distanceThreshold = .5f;
+    LivingEntity target;
     AnimController2D animControl;
     Controller2D controller;
 
@@ -21,10 +25,17 @@ public class AIEnemy : LivingEntity {
         base.Start();
         animControl = GetComponent<AnimController2D>();
         controller = GetComponent<Controller2D>();
+        target = FindObjectOfType<Player>();
     }
 
     // Update is called once per frame
     void Update () {
-        animControl.Move(controller.ProcessMovementInput(Vector2.zero, states));
+        float distFromTarget = transform.position.x - target.transform.position.x;
+        float sign = Mathf.Sign(distFromTarget);
+        if (controller.collisions.below && Mathf.Abs(distFromTarget) > distanceThreshold)
+            moveInput.x = -1*sign;
+
+        animControl.Move(controller.ProcessMovementInput(moveInput, states));
+        moveInput = Vector2.zero;
 	}
 }

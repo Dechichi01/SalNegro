@@ -58,6 +58,7 @@ public class LivingEntityStates
     public bool grounded;
 
     public bool useGravity = true;
+    public bool checkCollisions = true;
 
     public bool isRolling = false;
     public bool isAttacking = false;
@@ -68,6 +69,7 @@ public class LivingEntityStates
         canAttack = states.canAttack;
         canPerformAction = states.canPerformAction;
         useGravity = states.useGravity;
+        checkCollisions = states.checkCollisions;
 
         isRolling = states.isRolling;
         isAttacking = states.isAttacking;

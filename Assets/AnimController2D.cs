@@ -9,7 +9,7 @@ public class AnimController2D : MonoBehaviour {
 
     Animator anim;
 
-    bool checkGround = true;
+    public bool checkGround = true;
     
     private void Start()
     {
@@ -45,7 +45,7 @@ public class AnimController2D : MonoBehaviour {
         if (hit)
         {
             if (hit.distance > 0.8 * controller.jumpHeight) anim.SetTrigger("airAttack");
-            else if (hit.distance == 0) anim.SetTrigger("attack");
+            else anim.SetTrigger("attack");
         }
     }
 
@@ -61,6 +61,11 @@ public class AnimController2D : MonoBehaviour {
         //anim.SetTrigger("turn");
         Vector3 rot = transform.GetChild(0).rotation.eulerAngles;
         transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
+    }
+
+    public void ClimbLadder()
+    {
+        anim.SetTrigger("climb");
     }
 
     public void Jump(float timeToJumpApex)
