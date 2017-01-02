@@ -17,7 +17,7 @@ public class RaycastController : MonoBehaviour {
 
     protected virtual void Awake()
     {
-        coll = GetComponentInChildren<BoxCollider2D>();
+        if (coll == null) coll = GetComponentInChildren<BoxCollider2D>();
     }
 
     protected virtual void Start()

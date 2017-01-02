@@ -5,17 +5,16 @@ using System.Collections;
 public class AnimController2D : MonoBehaviour {
 
     Controller2D controller;
-    EventHandler eventHandler;
 
     Animator anim;
 
     public bool checkGround = true;
+    public bool applyRootMotion = true;
     
     private void Start()
     {
         controller = GetComponent<Controller2D>();
         anim = GetComponent<Animator>();
-        eventHandler = FindObjectOfType<EventHandler>();
     }
 
     private void Update()
@@ -27,6 +26,14 @@ public class AnimController2D : MonoBehaviour {
     {
         //Check hard fall
         if (velocity.y < -11f) anim.SetBool("hardFall", true);
+
+        if (applyRootMotion)
+        {
+            Vector2 animMoveAmount = (Vector2)anim.velocity * Time.deltaTime;
+            float sign = facingRight ? 1 : -1;
+            velocity.x = sign*Mathf.Clamp(Mathf.Abs(animMoveAmount.x), Mathf.Abs(velocity.x), float.MaxValue);
+            velocity.y += animMoveAmount.y;
+        }
 
         velocity = controller.Move(velocity);
 
@@ -40,7 +47,6 @@ public class AnimController2D : MonoBehaviour {
 
     public void Attack()
     {
-        eventHandler.ChangeToActionState(false);
         RaycastHit2D hit = Physics2D.Raycast(controller.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
         if (hit)
         {
@@ -51,7 +57,7 @@ public class AnimController2D : MonoBehaviour {
 
     public void Roll()
     {
-        eventHandler.ChangeToActionState(true);
+        //eventHandler.ChangeToActionState(true);
         anim.SetTrigger("roll");
     }
 
@@ -63,7 +69,7 @@ public class AnimController2D : MonoBehaviour {
         transform.rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
     }
 
-    public void ClimbLadder()
+    public void ClimbLadder(float finalYPos)
     {
         anim.SetTrigger("climb");
     }

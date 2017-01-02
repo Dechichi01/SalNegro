@@ -50,7 +50,8 @@ public class Controller2D : RaycastController
 
         if (standingOnPlatform) collisions.below = true;
         //Move player with the new velocity
-        transform.Translate(new Vector3(0, velocity.y, 0));
+        //transform.Translate(new Vector3(0, velocity.y, 0));
+        transform.Translate(transform.TransformVector(new Vector2(-velocity.x, velocity.y)));
 
         return velocity;
     }
@@ -69,7 +70,6 @@ public class Controller2D : RaycastController
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
 
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
-
             Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 
             if (hit)
@@ -297,7 +297,7 @@ public class Controller2D : RaycastController
 
     public bool CheckGroundAnim()
     {
-        return Physics2D.Raycast(groundCheck.position, Vector3.down, 1f, collisionMask);
+        return Physics2D.Raycast(groundCheck.position, Vector3.down, 2f, collisionMask);
     }
 }
 
