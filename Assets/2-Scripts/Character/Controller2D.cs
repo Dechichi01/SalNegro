@@ -18,7 +18,6 @@ public class Controller2D : RaycastController
     float jumpVelocity;
     //
 
-    Vector2 velocity;
     float velocityXSmooth;
 
     public Transform groundCheck;
@@ -27,6 +26,8 @@ public class Controller2D : RaycastController
 
     [HideInInspector]
     public Vector2 moveInput;
+    [HideInInspector]
+    public Vector2 velocity;
 
     protected override void Start()
     {

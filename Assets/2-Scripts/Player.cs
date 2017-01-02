@@ -23,11 +23,14 @@ public class Player : LivingEntity {
     private void Update()
     {
         //PCTest
-        if (Input.GetKey(KeyCode.RightArrow)) ProcessTouch(ActionType.MoveRight);
-        if (Input.GetKey(KeyCode.LeftArrow)) ProcessTouch(ActionType.MoveLeft);
-        if (Input.GetKeyDown(KeyCode.Space)) ProcessTouch(ActionType.Jump);
-        if (Input.GetKeyDown(KeyCode.Z)) ProcessTouch(ActionType.Attack);
-        if (Input.GetKeyDown(KeyCode.X)) ProcessTouch(ActionType.Roll);
+        if (states.canPerformAction)
+        {
+            if (Input.GetKey(KeyCode.RightArrow)) ProcessTouch(ActionType.MoveRight);
+            if (Input.GetKey(KeyCode.LeftArrow)) ProcessTouch(ActionType.MoveLeft);
+            if (Input.GetKeyDown(KeyCode.Space)) ProcessTouch(ActionType.Jump);
+            if (Input.GetKeyDown(KeyCode.Z)) ProcessTouch(ActionType.Attack);
+            if (Input.GetKeyDown(KeyCode.X)) ProcessTouch(ActionType.Roll);
+        }
 
         /*
         for (int i = 0; i < inputManager.touchInputs.Length; i++)

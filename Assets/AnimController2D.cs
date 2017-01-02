@@ -69,9 +69,26 @@ public class AnimController2D : MonoBehaviour {
         transform.rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
     }
 
-    public void ClimbLadder(float finalYPos)
+    public void ClimbLadder(Vector3 startClimbPos)
     {
         anim.SetTrigger("climb");
+        startClimbPos = new Vector3(startClimbPos.x, startClimbPos.y, transform.position.z);
+        SetAirState(1f);
+        StartCoroutine(MovePlayerToClimbPos(startClimbPos));
+    }
+
+    IEnumerator MovePlayerToClimbPos(Vector3 startClimbPos)
+    {
+        float percent = 0f;
+        Vector3 start = transform.position;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime * 10f;
+            transform.position = Vector3.Lerp(start, startClimbPos, percent);
+            yield return null;
+        }
+        transform.position = startClimbPos;
+        //anim.SetTrigger("climb");
     }
 
     public void Jump(float timeToJumpApex)

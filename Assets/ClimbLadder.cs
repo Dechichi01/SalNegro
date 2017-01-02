@@ -21,8 +21,10 @@ public class ClimbLadder : StateMachineBehaviour {
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        //animator.applyRootMotion = true;
+
         controller = animator.GetComponent<Controller2D>();
-        delta = controller.GetComponentInChildren<ClimbPlatformVerifier>().climbLadderFinalPos - (Vector2) animator.transform.position;
+        delta = controller.GetComponentInChildren<ClimbPlatformVerifier>().climbLadderStartPos;
         sign = controller.GetComponent<LivingEntity>().states.facingRight ? 1 : -1;
 
         intervalAnimPercents = new IntervalValues[climbFrameIntervals.Length];
@@ -50,39 +52,20 @@ public class ClimbLadder : StateMachineBehaviour {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (index < intervalAnimPercents.Length && stateInfo.normalizedTime > intervalAnimPercents[index].start)
-        {
-            Vector2 framePos = movementCurve.Evaluate(stateInfo.normalizedTime) * deltaInInterval;
-            Vector2 moveAmount = framePos - prevPos;
-            prevPos = framePos;
-            if (remainingMovement.y - moveAmount.y > 0)
-            {
-                controller.Move(moveAmount);
-                remainingMovement -= moveAmount;
-            }
-            else
-            {
-                moveAmount = remainingMovement;
-                controller.Move(moveAmount);
-                index++;
-                if (index < intervalAnimPercents.Length)
-                {
-                    deltaInInterval = deltaPercentInInterval[0] * delta;
-                    remainingMovement = deltaInInterval;
-                }
-            }
-        }
+        //controller.Move(animator.velocity * Time.deltaTime);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         index = 0;
+        //animator.applyRootMotion = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-    //
-    //}
+    override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        controller.velocity = ((Vector2) animator.velocity * Time.deltaTime);
+        controller.Move(controller.velocity);
+    }
 
     // OnStateIK is called right after Animator.OnAnimatorIK(). Code that sets up animation IK (inverse kinematics) should be implemented here.
     //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

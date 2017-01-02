@@ -8,9 +8,10 @@ public class ClimbPlatformVerifier : RaycastController {
 
     LivingEntity livingEntity;
     AnimController2D animCtrl;
+    Controller2D controller;
 
     [HideInInspector]
-    public Vector2 climbLadderFinalPos;
+    public Vector2 climbLadderStartPos;
 
     protected override void Start()
     {
@@ -18,6 +19,7 @@ public class ClimbPlatformVerifier : RaycastController {
         rayLength = skinWidth * 2;
         livingEntity = GetComponentInParent<LivingEntity>();
         animCtrl = livingEntity.GetComponent<AnimController2D>();
+        controller = livingEntity.GetComponent<Controller2D>();
     }
     // Update is called once per frame
     void Update () {
@@ -31,10 +33,11 @@ public class ClimbPlatformVerifier : RaycastController {
 
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right*rayDir, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.right * rayDir* rayLength, Color.red);
-            if (hit && !livingEntity.states.grounded)
+            if (!livingEntity.states.isClimbing && hit)
             {
-                climbLadderFinalPos = new Vector2(hit.collider.bounds.min.x, hit.collider.bounds.max.y);
-                animCtrl.ClimbLadder(hit.collider.bounds.max.y);
+                climbLadderStartPos = new Vector2(hit.collider.bounds.min.x, hit.collider.bounds.min.y)
+                    - (Vector2) hit.collider.GetComponent<PlatformClimbTrigger>().startClimbPos.position;
+                animCtrl.ClimbLadder(hit.collider.GetComponent<PlatformClimbTrigger>().startClimbPos.position);
             }                
         }
     }

@@ -62,6 +62,7 @@ public class LivingEntityStates
 
     public bool isRolling = false;
     public bool isAttacking = false;
+    public bool isClimbing = false;
 
     public void Copy(LivingEntityStates states)
     {
@@ -73,5 +74,6 @@ public class LivingEntityStates
 
         isRolling = states.isRolling;
         isAttacking = states.isAttacking;
+        isClimbing = states.isClimbing;
     }
 }
