@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(BoxCollider2D))]
+//[RequireComponent(typeof(BoxCollider2D))]
 public class RaycastController : MonoBehaviour {
 
     //Assigned in the inspector
@@ -17,7 +17,7 @@ public class RaycastController : MonoBehaviour {
 
     protected virtual void Awake()
     {
-        coll = GetComponent<BoxCollider2D>();
+        coll = GetComponentInChildren<BoxCollider2D>();
     }
 
     protected virtual void Start()

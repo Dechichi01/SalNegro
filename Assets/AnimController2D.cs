@@ -14,7 +14,7 @@ public class AnimController2D : MonoBehaviour {
     private void Start()
     {
         controller = GetComponent<Controller2D>();
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
         eventHandler = FindObjectOfType<EventHandler>();
     }
 

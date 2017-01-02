@@ -50,7 +50,7 @@ public class Controller2D : RaycastController
 
         if (standingOnPlatform) collisions.below = true;
         //Move player with the new velocity
-        transform.Translate(velocity);
+        transform.Translate(new Vector2(0, velocity.y));
 
         return velocity;
     }
