@@ -23,13 +23,19 @@ public class AnimController2D : MonoBehaviour {
         if (checkGround)
             anim.SetBool("onAir", !(controller.CheckGroundAnim() || controller.collisions.below));
     }
-    public void Move(Vector2 velocity)
+    public void Move(Vector2 velocity, bool facingRight)
     {
         //Check hard fall
         if (velocity.y < -11f) anim.SetBool("hardFall", true);
 
         velocity = controller.Move(velocity);
 
+        Debug.Log(velocity.x);
+        if (Mathf.Abs(velocity.x) < .1f)//Idle right or left
+        {
+            anim.SetFloat("horizontal", facingRight ? 0.1f : -0.1f);
+            return;
+        }
         //Calculate horizontal movement percentage
         float moveSpeed = controller.moveSpeed;
         if (controller.collisions.climbingSlope || controller.collisions.descendingSlope)
@@ -60,7 +66,7 @@ public class AnimController2D : MonoBehaviour {
         //eventHandler.ChangeToActionState(false);
         //anim.SetTrigger("turn");
         Vector3 rot = transform.GetChild(0).rotation.eulerAngles;
-        transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
+        //transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
     }
 
     public void ClimbLadder()

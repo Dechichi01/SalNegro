@@ -35,7 +35,7 @@ public class AIEnemy : LivingEntity {
         if (controller.collisions.below && Mathf.Abs(distFromTarget) > distanceThreshold)
             moveInput.x = -1*sign;
 
-        animControl.Move(controller.ProcessMovementInput(moveInput, states));
+        animControl.Move(controller.ProcessMovementInput(moveInput, states), states.facingRight);
         moveInput = Vector2.zero;
 	}
 }

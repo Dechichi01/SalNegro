@@ -36,7 +36,7 @@ public class Player : LivingEntity {
                 ProcessTouch(inputManager.touchInputs[i].actionType);
         }*/
 
-        animControl.Move(controller.ProcessMovementInput(moveInput, states));
+        animControl.Move(controller.ProcessMovementInput(moveInput, states), states.facingRight);
         moveInput = Vector2.zero;
 
     }
