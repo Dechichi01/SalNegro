@@ -27,13 +27,13 @@ public class AnimController2D : MonoBehaviour {
         //Check hard fall
         if (velocity.y < -11f) anim.SetBool("hardFall", true);
 
-        if (applyRootMotion)
+        /*if (applyRootMotion)
         {
             Vector2 animMoveAmount = (Vector2)anim.velocity * Time.deltaTime;
             float sign = facingRight ? 1 : -1;
             velocity.x = sign*Mathf.Clamp(Mathf.Abs(animMoveAmount.x), Mathf.Abs(velocity.x), float.MaxValue);
             velocity.y += animMoveAmount.y;
-        }
+        }*/
 
         velocity = controller.Move(velocity);
 

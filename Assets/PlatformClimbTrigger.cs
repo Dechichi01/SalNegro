@@ -8,5 +8,4 @@ public class PlatformClimbTrigger : MonoBehaviour {
 	void Start () {
         if (!startClimbPos) startClimbPos = transform.GetChild(0);
 	}
-	
 }

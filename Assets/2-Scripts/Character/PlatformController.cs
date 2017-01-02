@@ -76,6 +76,7 @@ public class PlatformController : RaycastController
             Vector2 rayOrigin = raycastOrigins.topLeft + Vector2.right * (verticalRaySpacing * i);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up, rayLength, passengerMask);
 
+            Debug.DrawRay(rayOrigin, Vector2.up * 200, Color.red);
             if (hit)
             {
                 if (hit.distance > 0 && !movedPassengers.Contains(hit.transform))
@@ -85,8 +86,7 @@ public class PlatformController : RaycastController
                     bool standingOnPlatform = hit.distance <= 2 * skinWidth;
                     pushX = standingOnPlatform ? velocity.x : 0;
                     pushY = standingOnPlatform ? velocity.y : (velocity.y - (hit.distance - skinWidth) * directionY);
-                    Debug.Log(standingOnPlatform);
-                    passengerMovement.Add(new PassengerMovement(hit.transform, new Vector3(pushX, pushY), standingOnPlatform, directionY == 1));
+                    passengerMovement.Add(new PassengerMovement(hit.transform.root, new Vector3(pushX, pushY), standingOnPlatform, directionY == 1));
                 }
             }
         }

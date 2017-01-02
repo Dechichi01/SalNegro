@@ -10,9 +10,6 @@ public class ClimbPlatformVerifier : RaycastController {
     AnimController2D animCtrl;
     Controller2D controller;
 
-    [HideInInspector]
-    public Vector2 climbLadderStartPos;
-
     protected override void Start()
     {
         base.Start();
@@ -35,8 +32,6 @@ public class ClimbPlatformVerifier : RaycastController {
             Debug.DrawRay(rayOrigin, Vector2.right * rayDir* rayLength, Color.red);
             if (!livingEntity.states.isClimbing && hit)
             {
-                climbLadderStartPos = new Vector2(hit.collider.bounds.min.x, hit.collider.bounds.min.y)
-                    - (Vector2) hit.collider.GetComponent<PlatformClimbTrigger>().startClimbPos.position;
                 animCtrl.ClimbLadder(hit.collider.GetComponent<PlatformClimbTrigger>().startClimbPos.position);
             }                
         }
