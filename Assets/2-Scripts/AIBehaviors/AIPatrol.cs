@@ -18,7 +18,7 @@ public class AIPatrol : AIBase {
 
     Vector2[] patrolPoints;
     int fromPatrolPointIndex, toPatrolPointIndex;
-    float percentBetweenPatrolPoints = 1;//Must start at 1
+    float percentBetweenPatrolPoints = 0f;
     float nextMoveTime;
 
     protected override void Start()
@@ -28,11 +28,15 @@ public class AIPatrol : AIBase {
         patrolPoints = new Vector2[localPatrolPoints.Length];
         for (int i = 0; i < localPatrolPoints.Length; i++)
             patrolPoints[i] = localPatrolPoints[i] + (Vector2) transform.position;
+
+        fromPatrolPointIndex = 0;
+        toPatrolPointIndex = (fromPatrolPointIndex + 1) % patrolPoints.Length;//+1
     }
 
     private void Update()
     {
-        CalculateMovement();
+        if (aiControl.aiState == AIState.Patrolling)
+            aiControl.Move(CalculateMovement());
     }
 
     float Ease(float x)
@@ -41,9 +45,9 @@ public class AIPatrol : AIBase {
         return Mathf.Pow(x, a) / (Mathf.Pow(x, a) + Mathf.Pow(1 - x, a));
     }
 
-    private void CalculateMovement()
+    private Vector2 CalculateMovement()
     {
-        if (Time.time < nextMoveTime) return;//Waiting on patrolPoint
+        if (Time.time < nextMoveTime) return Vector2.zero;//Waiting on patrolPoint
         
         if (percentBetweenPatrolPoints < 1)
         {
@@ -52,7 +56,8 @@ public class AIPatrol : AIBase {
             percentBetweenPatrolPoints = Mathf.Clamp01(percentBetweenPatrolPoints);
             Vector2 newPos = Vector2.Lerp(patrolPoints[fromPatrolPointIndex], patrolPoints[toPatrolPointIndex], Ease(percentBetweenPatrolPoints));
             if (!flying) newPos.y = 0;
-            aiControl.Move(newPos - (Vector2) transform.position);
+
+            return newPos - (Vector2)transform.position;
         }
         else//Reset
         {
@@ -61,7 +66,11 @@ public class AIPatrol : AIBase {
             toPatrolPointIndex = (fromPatrolPointIndex + 1) % patrolPoints.Length;//+1
 
             nextMoveTime = Time.time + Random.Range(waitTime.start, waitTime.end);
+
+            return Vector2.zero;
         }
+
+
     }
 
     void OnDrawGizmos()

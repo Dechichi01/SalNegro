@@ -93,4 +93,5 @@ public class Character2D : LivingEntity {
                 break;
         }
     }
+
 }

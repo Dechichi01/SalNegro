@@ -10,6 +10,10 @@ using System.Collections;
 */
 public class AIController2D : Character2D {
 
+    public AIState aiState = AIState.Idle;
+    [Range(0.1f, 5f)]
+    public float aiCycleTime = .8f;
+
     // Wait for every AIBehavior to finish
     private void LateUpdate()
     {
@@ -18,7 +22,6 @@ public class AIController2D : Character2D {
 
     public void Move(Vector2 deltaPos)
     {
-        Debug.Log(deltaPos.x);
         if ((deltaPos.x > 0.01f && !states.facingRight) || (deltaPos.x < -0.01f && states.facingRight))
         {
             states.facingRight = !states.facingRight;
@@ -27,4 +30,9 @@ public class AIController2D : Character2D {
 
         animControl.Move(deltaPos, states.facingRight);
     }
+}
+
+public enum AIState
+{
+    Idle, Chasing, Patrolling, Fighting
 }
