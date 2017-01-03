@@ -5,30 +5,33 @@ public class AIChase : AIBase {
 
     public AIState stateOnCatch;
     public float distThreshold = 0.5f;
+    float nextCheckTime;
 
     Transform target;
+
+    float moveInputX = 0f;
 
     protected override void Start()
     {
         base.Start();
         target = FindObjectOfType<PlayerController2D>().transform;
+        nextCheckTime = Time.time + aiControl.aiCycleTime;
     }
 
-    IEnumerator ChaseCycle()
+    private void Update()
     {
-        if (aiControl.aiState != AIState.Chasing) yield return new WaitForSeconds(aiControl.aiCycleTime);
+        if (aiControl.aiState != AIState.Chasing) return;
 
-        /*float distFromTarget = transform.position.x - target.transform.position.x;
-        float sign = Mathf.Sign(distFromTarget);
-        if (controller.collisions.below && Mathf.Abs(distFromTarget) > distThreshold)
-            aiControl.moveInput.x = -1 * sign;
+        aiControl.moveInput.x = moveInputX;
 
-        if (states.facingRight != (moveInput.x == 1))
+        if (Time.time > nextCheckTime)
         {
-            states.facingRight = moveInput.x == 1;
-            animControl.Turn();
-        }*/
-
+            nextCheckTime = Time.time + aiControl.aiCycleTime;
+            float distFromTarget = transform.position.x - target.transform.position.x;
+            float sign = Mathf.Sign(distFromTarget);
+            if (aiControl.states.grounded && Mathf.Abs(distFromTarget) > distThreshold)
+                moveInputX = -1 * sign;
+        }
     }
 
 }

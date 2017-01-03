@@ -27,7 +27,6 @@ public class FieldOfView2D : MonoBehaviour
         {
             yield return new WaitForSeconds(delay);
             FindVisibleTargets();
-            Debug.Log(visibleTargets.Count);
         }
     }
 

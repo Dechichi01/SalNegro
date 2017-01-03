@@ -53,6 +53,9 @@ public class Character2D : LivingEntity {
 
     protected void ApplyActionsAndMovement()
     {
+        if (!states.canPerformAction || !states.canMove) moveInput = Vector2.zero;
+        if (!states.canPerformAction) actionsQueue.Clear();
+
         //Movement
         Move(ProcessMovementInput(moveInput, states));
         moveInput = Vector2.zero;

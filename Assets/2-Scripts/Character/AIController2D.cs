@@ -10,14 +10,39 @@ using System.Collections;
 */
 public class AIController2D : Character2D {
 
-    public AIState aiState = AIState.Idle;
+    [HideInInspector]
+    private AIState aiInitialState = AIState.Patrolling;
+
+    public AIState aiState;
     [Range(0.1f, 5f)]
     public float aiCycleTime = .8f;
+
+    public bool targetInSight = false;
+    bool changedStateBack = false;
 
     // Wait for every AIBehavior to finish
     private void LateUpdate()
     {
+        if (!targetInSight && !changedStateBack)
+        {
+            changedStateBack = true;
+            StartCoroutine(ChangeToOriginalState());
+        }
+        else if (targetInSight && aiState == AIState.Patrolling) aiState = AIState.Chasing;
+
         ApplyActionsAndMovement();
+    }
+
+    public void Turn()
+    {
+        animControl.Turn();
+    }
+
+    IEnumerator ChangeToOriginalState()
+    {
+        yield return new WaitForSeconds(25);
+        changedStateBack = false;
+        if (!targetInSight) aiState = aiInitialState;
     }
 }
 
