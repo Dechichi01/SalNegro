@@ -3,10 +3,10 @@ using System.Collections;
 
 public class PhysicsDuringMovement : StateMachineBehaviour {
 
-    Controller2D controller;
+    Character2D character;
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        controller = FindObjectOfType<Controller2D>();
+        character = FindObjectOfType<Character2D>();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -21,8 +21,8 @@ public class PhysicsDuringMovement : StateMachineBehaviour {
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        controller.velocity = ((Vector2)animator.velocity * Time.deltaTime);
-        controller.Move(2*controller.velocity);
+        character.velocity = ((Vector2)animator.velocity * Time.deltaTime);
+        character.Move(2*character.velocity, true);
     }
 
 	// OnStateIK is called right after Animator.OnAnimatorIK(). Code that sets up animation IK (inverse kinematics) should be implemented here.

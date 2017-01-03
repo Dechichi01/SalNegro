@@ -6,34 +6,14 @@ public class Controller2D : RaycastController
     //Assigned in the inspector
     public LayerMask collisionMask;
     public float maxSlopeAngle = 50f;
-    //Movement related variables
-    public float moveSpeed = 7f;
-    public float accTimeGround = .1f;
-    public float accTimeAir = .2f;
-
-    public float jumpHeight = 3.5f;
-    public float timeToJumpApex = .6f;
-
-    float gravity;
-    float jumpVelocity;
-    //
-
-    float velocityXSmooth;
-
+    
     public Transform groundCheck;
 
     public CollisionInfo collisions;
 
-    [HideInInspector]
-    public Vector2 moveInput;
-    [HideInInspector]
-    public Vector2 velocity;
-
     protected override void Start()
     {
         base.Start();
-        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
     }
 
     public Vector2 Move(Vector2 velocity, bool standingOnPlatform = false)
@@ -254,47 +234,6 @@ public class Controller2D : RaycastController
     }
 
     #endregion
-
-    public Vector2 ProcessMovementInput(Vector2 _moveInput, LivingEntityStates states)
-    {
-        moveInput = _moveInput;
-
-        states.grounded = collisions.below;
-
-        //Not accumulate gravity
-        if (collisions.above || collisions.below)
-        {
-            if (collisions.slidingDownMaxSlope)
-                velocity.y += collisions.slopeNormal.y * -gravity * Time.deltaTime;
-            else
-                velocity.y = 0;
-        }
-
-        //Calculate velocity.x
-        float targetVX = moveSpeed * moveInput.x;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, states.grounded ? accTimeGround : accTimeAir);
-
-        //Calculate velocity.y
-        if (moveInput.y > 0)//Jump
-        {
-            if (collisions.slidingDownMaxSlope)
-            {
-                if (moveInput.x != -Mathf.Sign(collisions.slopeNormal.x))//not jumping againt max slope
-                {
-                    velocity.y = jumpVelocity * collisions.slopeNormal.y;
-                    velocity.x = jumpVelocity * collisions.slopeNormal.x;
-                }
-            }
-            else
-                velocity.y = moveInput.y * jumpVelocity;
-        }
-
-        if (states.useGravity)
-            velocity.y += gravity * Time.deltaTime;
-
-  
-        return velocity*Time.deltaTime;
-    }
 
     public bool CheckGroundAnim()
     {

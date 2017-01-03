@@ -5,6 +5,7 @@ using System.Collections;
 public class AnimController2D : MonoBehaviour {
 
     Controller2D controller;
+    Character2D character;
 
     Animator anim;
 
@@ -13,6 +14,7 @@ public class AnimController2D : MonoBehaviour {
     private void Start()
     {
         controller = GetComponent<Controller2D>();
+        character = GetComponent<Character2D>();
         anim = GetComponent<Animator>();
     }
 
@@ -29,7 +31,7 @@ public class AnimController2D : MonoBehaviour {
         velocity = controller.Move(velocity);
 
         //Calculate horizontal movement percentage
-        float moveSpeed = controller.moveSpeed;
+        float moveSpeed = character.moveSpeed;
         if (controller.collisions.climbingSlope || controller.collisions.descendingSlope)
             moveSpeed *= Mathf.Cos(controller.collisions.slopeAngle * Mathf.Deg2Rad);
 
@@ -41,7 +43,7 @@ public class AnimController2D : MonoBehaviour {
         RaycastHit2D hit = Physics2D.Raycast(controller.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
         if (hit)
         {
-            if (hit.distance > 0.8 * controller.jumpHeight) anim.SetTrigger("airAttack");
+            if (hit.distance > 0.8 * character.jumpHeight) anim.SetTrigger("airAttack");
             else anim.SetTrigger("attack");
         }
     }

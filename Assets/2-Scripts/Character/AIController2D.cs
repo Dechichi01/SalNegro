@@ -19,17 +19,6 @@ public class AIController2D : Character2D {
     {
         ApplyActionsAndMovement();
     }
-
-    public void Move(Vector2 deltaPos)
-    {
-        if ((deltaPos.x > 0.01f && !states.facingRight) || (deltaPos.x < -0.01f && states.facingRight))
-        {
-            states.facingRight = !states.facingRight;
-            animControl.Turn();
-        }
-
-        animControl.Move(deltaPos, states.facingRight);
-    }
 }
 
 public enum AIState
