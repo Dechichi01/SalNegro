@@ -41,13 +41,13 @@ public class GameManager : MonoBehaviour {
         audioManager.parent = currentPlayer.transform;
 
         //Set up controllers
-        SwipeDetector swipeDetect = currentPlayer.GetComponent<SwipeDetector>();
-        swipeDetect.aimJoystickArea = controllersUI.AimJoystickArea;
+        //SwipeDetector swipeDetect = currentPlayer.GetComponent<SwipeDetector>();
+        /*swipeDetect.aimJoystickArea = controllersUI.AimJoystickArea;
         swipeDetect.aimJoystickRect = controllersUI.AimJoystickRect;
         swipeDetect.attackJoystickRect = controllersUI.AttackJoystickRect;
         swipeDetect.changeWeaponJoystickRect = controllersUI.ChangeWeaponRect;
         //Camera.main.GetComponent<CameraController>().SetTarget(currentPlayer.transform);
-        //Camera.main.GetComponent<CameraFollow>().SetTarget(currentPlayer.transform);
+        //Camera.main.GetComponent<CameraFollow>().SetTarget(currentPlayer.transform);*/
 
     }
 
