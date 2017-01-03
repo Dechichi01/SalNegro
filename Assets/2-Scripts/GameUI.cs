@@ -17,11 +17,11 @@ public class GameUI : MonoBehaviour {
     public Text winScoreUI;
     public RectTransform healthBar;
 
-    private Player player;
+    private PlayerController2D player;
 
 	void Start()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<PlayerController2D>();
 //        player.OnDeath += OnGameOver;
         fadePlane.enabled = false;
         

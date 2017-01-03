@@ -3,11 +3,11 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-    public Player startPlayer;
+    public PlayerController2D startPlayer;
     public Canvas canvas;
     //private WeaponManager weaponManager;
 
-    public Player currentPlayer { get; set; }
+    public PlayerController2D currentPlayer { get; set; }
     //public Weapon playerCurrentWeapon { get; set; }
     private ControllersUI controllersUI;
     private GameUI gameUI;

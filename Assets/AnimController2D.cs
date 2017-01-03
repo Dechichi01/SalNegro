@@ -9,7 +9,6 @@ public class AnimController2D : MonoBehaviour {
     Animator anim;
 
     public bool checkGround = true;
-    public bool applyRootMotion = true;
     
     private void Start()
     {
@@ -26,14 +25,6 @@ public class AnimController2D : MonoBehaviour {
     {
         //Check hard fall
         if (velocity.y < -11f) anim.SetBool("hardFall", true);
-
-        /*if (applyRootMotion)
-        {
-            Vector2 animMoveAmount = (Vector2)anim.velocity * Time.deltaTime;
-            float sign = facingRight ? 1 : -1;
-            velocity.x = sign*Mathf.Clamp(Mathf.Abs(animMoveAmount.x), Mathf.Abs(velocity.x), float.MaxValue);
-            velocity.y += animMoveAmount.y;
-        }*/
 
         velocity = controller.Move(velocity);
 
@@ -75,6 +66,11 @@ public class AnimController2D : MonoBehaviour {
         startClimbPos = new Vector3(startClimbPos.x, startClimbPos.y, transform.position.z);
         SetAirState(1f);
         StartCoroutine(MovePlayerToClimbPos(startClimbPos));
+    }
+
+    public void Die()
+    {
+        anim.SetTrigger("die");
     }
 
     IEnumerator MovePlayerToClimbPos(Vector3 startClimbPos)

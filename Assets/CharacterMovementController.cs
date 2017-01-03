@@ -16,11 +16,11 @@ public class CharacterMovementController : MonoBehaviour {
     float velocityXSmoothing;
 
     CharacterController charCtrl;
-    Player player;
+    PlayerController2D player;
     // Use this for initialization
 	void Start () {
         charCtrl = GetComponent<CharacterController>();
-        player = GetComponent<Player>();
+        player = GetComponent<PlayerController2D>();
 	}
 	
     //returns a speed % that will be used to set "horizontal" parameter in the animator

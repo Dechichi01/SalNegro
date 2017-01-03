@@ -6,6 +6,7 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
     //Assigned in the inspector
     public AnimationCurve movementCurveX;
     public AnimationCurve movementCurveY;
+    public float multiplierX = 1f, multiplierY = 1f;
 
     float prevX, prevY;
     float x, y;
@@ -21,9 +22,9 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("ok");
-        x = movementCurveX.Evaluate(stateInfo.normalizedTime)*sign;
-        y = movementCurveY.Evaluate(stateInfo.normalizedTime);
+        Debug.Log(stateInfo.normalizedTime);
+        x = movementCurveX.Evaluate(stateInfo.normalizedTime)*sign*multiplierX;
+        y = movementCurveY.Evaluate(stateInfo.normalizedTime)*multiplierY;
 
         controller.Move(new Vector3(x - prevX, y-prevY));
 

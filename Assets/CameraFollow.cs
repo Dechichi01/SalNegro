@@ -21,12 +21,12 @@ public class CameraFollow : MonoBehaviour {
 
     bool lookAheadStopped;
 
-    Player player;
+    PlayerController2D player;
 
     void Start()
     {
         focusArea = new FocusArea(target.coll.bounds, focusAreaSize);
-        player = target.GetComponent<Player>();
+        player = target.GetComponent<PlayerController2D>();
     }
 
     void LateUpdate()
