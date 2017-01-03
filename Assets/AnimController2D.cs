@@ -5,7 +5,6 @@ using System.Collections;
 public class AnimController2D : MonoBehaviour {
 
     Controller2D controller;
-    EventHandler eventHandler;
 
     Animator anim;
 
@@ -14,8 +13,7 @@ public class AnimController2D : MonoBehaviour {
     private void Start()
     {
         controller = GetComponent<Controller2D>();
-        anim = GetComponentInChildren<Animator>();
-        eventHandler = FindObjectOfType<EventHandler>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -23,7 +21,7 @@ public class AnimController2D : MonoBehaviour {
         if (checkGround)
             anim.SetBool("onAir", !(controller.CheckGroundAnim() || controller.collisions.below));
     }
-    public void Move(Vector2 velocity)
+    public void Move(Vector2 velocity, bool facingRight)
     {
         //Check hard fall
         if (velocity.y < -11f) anim.SetBool("hardFall", true);
@@ -40,7 +38,6 @@ public class AnimController2D : MonoBehaviour {
 
     public void Attack()
     {
-        eventHandler.ChangeToActionState(false);
         RaycastHit2D hit = Physics2D.Raycast(controller.groundCheck.position, Vector2.down, 8f, controller.collisionMask);
         if (hit)
         {
@@ -51,7 +48,7 @@ public class AnimController2D : MonoBehaviour {
 
     public void Roll()
     {
-        eventHandler.ChangeToActionState(true);
+        //eventHandler.ChangeToActionState(true);
         anim.SetTrigger("roll");
     }
 
@@ -59,13 +56,35 @@ public class AnimController2D : MonoBehaviour {
     {
         //eventHandler.ChangeToActionState(false);
         //anim.SetTrigger("turn");
-        Vector3 rot = transform.GetChild(0).rotation.eulerAngles;
-        transform.GetChild(0).rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
+        Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(rot.x, -rot.y, rot.z);
     }
 
-    public void ClimbLadder()
+    public void ClimbLadder(Vector3 startClimbPos)
     {
         anim.SetTrigger("climb");
+        startClimbPos = new Vector3(startClimbPos.x, startClimbPos.y, transform.position.z);
+        SetAirState(1f);
+        StartCoroutine(MovePlayerToClimbPos(startClimbPos));
+    }
+
+    public void Die()
+    {
+        anim.SetTrigger("die");
+    }
+
+    IEnumerator MovePlayerToClimbPos(Vector3 startClimbPos)
+    {
+        float percent = 0f;
+        Vector3 start = transform.position;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime * 10f;
+            transform.position = Vector3.Lerp(start, startClimbPos, percent);
+            yield return null;
+        }
+        transform.position = startClimbPos;
+        //anim.SetTrigger("climb");
     }
 
     public void Jump(float timeToJumpApex)

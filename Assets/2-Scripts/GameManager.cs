@@ -3,11 +3,11 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-    public Player startPlayer;
+    public PlayerController2D startPlayer;
     public Canvas canvas;
     //private WeaponManager weaponManager;
 
-    public Player currentPlayer { get; set; }
+    public PlayerController2D currentPlayer { get; set; }
     //public Weapon playerCurrentWeapon { get; set; }
     private ControllersUI controllersUI;
     private GameUI gameUI;
@@ -41,13 +41,13 @@ public class GameManager : MonoBehaviour {
         audioManager.parent = currentPlayer.transform;
 
         //Set up controllers
-        SwipeDetector swipeDetect = currentPlayer.GetComponent<SwipeDetector>();
-        swipeDetect.aimJoystickArea = controllersUI.AimJoystickArea;
+        //SwipeDetector swipeDetect = currentPlayer.GetComponent<SwipeDetector>();
+        /*swipeDetect.aimJoystickArea = controllersUI.AimJoystickArea;
         swipeDetect.aimJoystickRect = controllersUI.AimJoystickRect;
         swipeDetect.attackJoystickRect = controllersUI.AttackJoystickRect;
         swipeDetect.changeWeaponJoystickRect = controllersUI.ChangeWeaponRect;
         //Camera.main.GetComponent<CameraController>().SetTarget(currentPlayer.transform);
-        //Camera.main.GetComponent<CameraFollow>().SetTarget(currentPlayer.transform);
+        //Camera.main.GetComponent<CameraFollow>().SetTarget(currentPlayer.transform);*/
 
     }
 

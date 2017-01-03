@@ -1,0 +1,99 @@
+fileFormatVersion: 2
+guid: c7661e8fb48be1c41ae6f4e55989f697
+timeCreated: 1483399483
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Hips
+    100002: Paladin_J_Nordstrom_Sword
+    100004: RightArm
+    100006: RightForeArm
+    100008: RightHand
+    100010: RightShoulder
+    100012: Spine
+    100014: Spine1
+    100016: Spine2
+    100018: //RootNode
+    100020: Sword_joint
+    400000: Hips
+    400002: Paladin_J_Nordstrom_Sword
+    400004: RightArm
+    400006: RightForeArm
+    400008: RightHand
+    400010: RightShoulder
+    400012: Spine
+    400014: Spine1
+    400016: Spine2
+    400018: //RootNode
+    400020: Sword_joint
+    2300000: Paladin_J_Nordstrom_Sword
+    3300000: Paladin_J_Nordstrom_Sword
+    4300000: Paladin_J_Nordstrom_Sword
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Paladin_J_Nordstrom_Sword
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 30
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
