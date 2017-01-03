@@ -9,9 +9,8 @@ using System.Collections;
  *      . Perform movement (using Vector2 movement input)
  *      . Perform action based on the user/AI input (using actionsQueue)
  
-----> OBS: On any child class, base.Update() must be called AFTER moveInput and actionTypes have been assigned 
-----> it's up to the child class to assign this variables with the desired action every update 
-(see PlayerController2D or AIController2D classes for example)<---
+----> OBS: Any child implementing this class should call ApplyActionsAndMovement() everyframe (even if there isn't any)
+for physics to be applied (see PlayerController2D or AIController2D classes for example)<---
  */
 [RequireComponent(typeof(AnimController2D))]
 public class Character2D : LivingEntity {
@@ -30,8 +29,9 @@ public class Character2D : LivingEntity {
         animControl = GetComponent<AnimController2D>();
         controller = GetComponent<Controller2D>();
     }
-	
-	protected virtual void Update () {
+
+    protected void ApplyActionsAndMovement()
+    {
         //Movement
         animControl.Move(controller.ProcessMovementInput(moveInput, states), states.facingRight);
         moveInput = Vector2.zero;

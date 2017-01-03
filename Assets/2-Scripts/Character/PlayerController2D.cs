@@ -12,7 +12,7 @@ public class PlayerController2D : Character2D {
         inputManager = GetComponent<MobileInputManager>();
     }
 
-    protected override void Update()
+    void Update()
     {
         //PCTest
         if (states.canPerformAction)
@@ -31,7 +31,7 @@ public class PlayerController2D : Character2D {
                 actionsQueue.Enqueue(inputManager.touchInputs[i].actionType);   
         }*/
 
-        base.Update();
+        ApplyActionsAndMovement();
     }
 
 }

@@ -5,39 +5,26 @@ using System.Collections;
 /*
  * AICharacter controller.
  * Equivalent to the PlayerController, with the exception that it's process inputs by several AI Behaviors 
- * It's up to the AIBehaviours to assign the actionQueue and/or movement input (see Character2D for examples)
+ * -> It's up to the AIBehaviours to assign the actionQueue and/or movement input (see Character2D for examples)
+ * -> Can override moveInput and move the character's directly (for more precision movement in Patrols and Follow rotines)
 */
 public class AIController2D : Character2D {
 
-    //Assigned in the inspectos
-    public bool followTarget;
-    public float distanceThreshold = .5f;
-    LivingEntity target;
-
-    protected override void Start()
+    // Wait for every AIBehavior to finish
+    private void LateUpdate()
     {
-        base.Start();
-        target = FindObjectOfType<PlayerController2D>();
+        ApplyActionsAndMovement();
     }
 
-    // Update is called once per frame
-    protected override void Update () {
-        if (followTarget)
+    public void Move(Vector2 deltaPos)
+    {
+        Debug.Log(deltaPos.x);
+        if ((deltaPos.x > 0.01f && !states.facingRight) || (deltaPos.x < -0.01f && states.facingRight))
         {
-            float distFromTarget = transform.position.x - target.transform.position.x;
-            float sign = Mathf.Sign(distFromTarget);
-            if (controller.collisions.below && Mathf.Abs(distFromTarget) > distanceThreshold)
-                moveInput.x = -1 * sign;
-
-            if (states.facingRight != (moveInput.x == 1))
-            {
-                states.facingRight = moveInput.x == 1;
-                animControl.Turn();
-            }
-
+            states.facingRight = !states.facingRight;
+            animControl.Turn();
         }
 
-        animControl.Move(controller.ProcessMovementInput(moveInput, states), states.facingRight);
-        moveInput = Vector2.zero;
+        animControl.Move(deltaPos, states.facingRight);
     }
 }
