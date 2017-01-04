@@ -14,6 +14,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     protected virtual void Start()
     {
         states = new LivingEntityStates();
+        states.facingRight = transform.root.rotation.eulerAngles.y == 90;
         health = startingHealth;
     }
 
@@ -45,7 +46,6 @@ public class LivingEntity : MonoBehaviour, IDamageable
             OnDeath = null;//Make all methods unsubscribe from OnDeath
         }
         Destroy(gameObject);
-
     }
 }
 
@@ -55,7 +55,7 @@ public class LivingEntityStates
     public bool canMove = true;
     public bool canAttack = true;
     public bool canPerformAction = true;
-    public bool facingRight = true;
+    public bool facingRight;
     public bool grounded;
 
     public bool useGravity = true;

@@ -24,7 +24,7 @@ public class AIVision : AIBase {
     {
         changingState = true;
         yield return new WaitForSeconds(10f);
-        aiControl.aiState = AIController2D.aiInitialState;
+        aiControl.aiState = aiControl.aiInitialState;
         changingState = false;
     }
 

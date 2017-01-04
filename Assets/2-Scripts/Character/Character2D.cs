@@ -30,6 +30,9 @@ public class Character2D : LivingEntity {
     public Weapon equippedWeapon;
     //
 
+    //FX
+    public ParticleSystem bloodFX;
+
     float velocityXSmooth;
 
     protected AnimController2D animControl;
@@ -89,6 +92,7 @@ public class Character2D : LivingEntity {
         if (equippedWeapon)
         {
             equippedWeapon.enabled = true;
+            StopAllCoroutines();
             StartCoroutine(DisableWeapon());
         }
         animControl.Attack();
@@ -96,7 +100,7 @@ public class Character2D : LivingEntity {
 
     IEnumerator DisableWeapon()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         equippedWeapon.enabled = false;
     }
 
@@ -110,12 +114,21 @@ public class Character2D : LivingEntity {
     {
         base.TakeDamage(damage);
         Debug.Log(gameObject.name);
+        bloodFX.Play();
         animControl.TakeHit();
     }
 
     public override void Die()
     {
         animControl.Die();
+        controller.coll.enabled = false;
+        this.enabled = false;
+        StartCoroutine(InvokeDeath());
+    }
+
+    IEnumerator InvokeDeath()
+    {
+        yield return new WaitForSeconds(10f);
         base.Die();
     }
 

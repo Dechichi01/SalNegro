@@ -11,7 +11,7 @@ using System.Collections;
 public class AIController2D : Character2D {
 
     //Assigned in the inspector
-    public const AIState aiInitialState = AIState.Patrolling;
+    public AIState aiInitialState = AIState.Patrolling;
     public Transform AIBehaviorsHolder;
 
     public AIState aiState;
