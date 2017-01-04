@@ -14,12 +14,15 @@ public class AIPatrol : AIBase {
     public FloatInterval waitTime;
     [Range(0,2)]
     public float easeAmount = 1;
-    public bool flying = false;
 
     Vector2[] patrolPoints;
     int fromPatrolPointIndex, toPatrolPointIndex;
+    float distanceBetweenPatrolPoints;
     float percentBetweenPatrolPoints = 0f;
     float nextMoveTime;
+
+    bool startingPatrol = false;
+    bool patrolStarted = false;
 
     protected override void Start()
     {
@@ -29,14 +32,50 @@ public class AIPatrol : AIBase {
         for (int i = 0; i < localPatrolPoints.Length; i++)
             patrolPoints[i] = localPatrolPoints[i] + (Vector2) transform.position;
 
+        //Initial calculations
         fromPatrolPointIndex = 0;
         toPatrolPointIndex = (fromPatrolPointIndex + 1) % patrolPoints.Length;//+1
+        distanceBetweenPatrolPoints = Vector3.Distance(patrolPoints[fromPatrolPointIndex], patrolPoints[toPatrolPointIndex]);
     }
 
-    private void Update()
+    public override void ProcessAICycle()
     {
         if (aiControl.aiState == AIState.Patrolling)
-            aiControl.Move(CalculateMovement());
+        {
+            if (patrolStarted) aiControl.Move(CalculateMovement());
+            else if (!startingPatrol) StartCoroutine(MoveToFirstPatrolPoint());
+        }
+        else patrolStarted = false ;
+    }
+
+    IEnumerator MoveToFirstPatrolPoint()
+    {
+        startingPatrol = true;
+        Vector2 start = aiControl.transform.position;
+        Vector2 end = patrolPoints[fromPatrolPointIndex];
+        float dist = Mathf.Abs(start.x - end.x);
+        float percent = 0f;
+
+        while(percent < 1)
+        {
+            Debug.Log(percent);
+            Vector2 newPos = LerpBetweenPoints(start, end, ref percent, dist);
+            aiControl.Move(newPos - (Vector2) aiControl.transform.position);
+            yield return new WaitForEndOfFrame();
+        }
+
+        percentBetweenPatrolPoints = 0f;
+        startingPatrol = false;
+        patrolStarted = true;
+    }
+
+    Vector2 LerpBetweenPoints(Vector2 start, Vector2 end, ref float percent, float distance)
+    {
+        percent += Time.deltaTime * speed / distance;
+        percent = Mathf.Clamp01(percent);
+        Vector2 newPos = Vector2.Lerp(start, end, Ease(percent));
+        newPos.y = 0;
+        return newPos;
     }
 
     float Ease(float x)
@@ -51,26 +90,25 @@ public class AIPatrol : AIBase {
         
         if (percentBetweenPatrolPoints < 1)
         {
-            float distanceBetweenWaypoints = Vector3.Distance(patrolPoints[fromPatrolPointIndex], patrolPoints[toPatrolPointIndex]);
-            percentBetweenPatrolPoints += Time.deltaTime * speed/distanceBetweenWaypoints;
-            percentBetweenPatrolPoints = Mathf.Clamp01(percentBetweenPatrolPoints);
-            Vector2 newPos = Vector2.Lerp(patrolPoints[fromPatrolPointIndex], patrolPoints[toPatrolPointIndex], Ease(percentBetweenPatrolPoints));
-            if (!flying) newPos.y = 0;
+            Vector2 newPos = LerpBetweenPoints(
+                patrolPoints[fromPatrolPointIndex],
+                patrolPoints[toPatrolPointIndex],
+                ref percentBetweenPatrolPoints,
+                distanceBetweenPatrolPoints);
 
-            return newPos - (Vector2)transform.position;
+            return newPos - (Vector2)aiControl.transform.position;
         }
         else//Reset
         {
             percentBetweenPatrolPoints = 0f;
             fromPatrolPointIndex = (fromPatrolPointIndex + 1) % patrolPoints.Length;
             toPatrolPointIndex = (fromPatrolPointIndex + 1) % patrolPoints.Length;//+1
+            distanceBetweenPatrolPoints = Mathf.Abs(patrolPoints[fromPatrolPointIndex].x - patrolPoints[toPatrolPointIndex].x);
 
             nextMoveTime = Time.time + Random.Range(waitTime.start, waitTime.end);
 
             return Vector2.zero;
         }
-
-
     }
 
     void OnDrawGizmos()

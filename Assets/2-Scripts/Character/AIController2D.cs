@@ -10,27 +10,34 @@ using System.Collections;
 */
 public class AIController2D : Character2D {
 
-    [HideInInspector]
-    private AIState aiInitialState = AIState.Patrolling;
+    //Assigned in the inspector
+    public const AIState aiInitialState = AIState.Patrolling;
+    public Transform AIBehaviorsHolder;
 
     public AIState aiState;
+
+    AIBase[] aiBehaviors;
+
     [Range(0.1f, 5f)]
     public float aiCycleTime = .8f;
 
-    public bool targetInSight = false;
-    bool changedStateBack = false;
+    protected override void Start()
+    {
+        base.Start();
+        aiBehaviors = AIBehaviorsHolder.GetComponents<AIBase>();
+        Debug.Log(aiBehaviors.Length);
+        foreach (AIBase baase in aiBehaviors)
+            Debug.Log(baase.GetType());
+    }
 
     // Wait for every AIBehavior to finish
-    private void LateUpdate()
+    private void Update()
     {
-        if (!targetInSight && !changedStateBack)
-        {
-            changedStateBack = true;
-            StartCoroutine(ChangeToOriginalState());
-        }
-        else if (targetInSight && aiState == AIState.Patrolling) aiState = AIState.Chasing;
+        foreach (AIBase aiBehav in aiBehaviors)
+            aiBehav.ProcessAICycle();
 
-        ApplyActionsAndMovement();
+        if (aiState != AIState.Patrolling)//Movement done automatically on patrolling
+            ApplyActionsAndMovement();
     }
 
     public void Turn()
@@ -38,12 +45,7 @@ public class AIController2D : Character2D {
         animControl.Turn();
     }
 
-    IEnumerator ChangeToOriginalState()
-    {
-        yield return new WaitForSeconds(25);
-        changedStateBack = false;
-        if (!targetInSight) aiState = aiInitialState;
-    }
+
 }
 
 public enum AIState

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class AIChase : AIBase {
 
     public AIState stateOnCatch;
-    public float distThreshold = 0.5f;
+    public float distThreshold = 1f;
     float nextCheckTime;
 
     Transform target;
@@ -18,7 +19,7 @@ public class AIChase : AIBase {
         nextCheckTime = Time.time + aiControl.aiCycleTime;
     }
 
-    private void Update()
+    public override void ProcessAICycle()
     {
         if (aiControl.aiState != AIState.Chasing) return;
 
@@ -31,7 +32,7 @@ public class AIChase : AIBase {
             float sign = Mathf.Sign(distFromTarget);
             if (aiControl.states.grounded && Mathf.Abs(distFromTarget) > distThreshold)
                 moveInputX = -1 * sign;
+            else aiControl.aiState = AIState.Fighting;
         }
     }
-
 }

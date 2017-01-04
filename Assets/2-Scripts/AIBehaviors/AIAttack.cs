@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AIAttack : AIBase {
 
-    public float attackDistTreshold = 0.8f;
+    public float maxAttackDist = 1.5f;
     public FloatInterval attackDelayInterval;
 
     float nextCheckTime;
@@ -26,23 +26,20 @@ public class AIAttack : AIBase {
         attackTypes[1] = new ProbabilityElement<int>(2, .3f);
     }
 
-    // Update is called once per frame
-    void Update () {
-
-        if (aiControl.aiState == AIState.Patrolling) return;
-
-        float dist = target.transform.position.x - transform.position.x;
+    public override void ProcessAICycle()
+    {
+        if (aiControl.aiState != AIState.Fighting) return;
 
         if (Time.time > nextCheckTime)
         {
-            FacePlayer(dist);
             nextCheckTime = Time.time + aiControl.aiCycleTime;
-            if (Mathf.Abs(dist) > attackDistTreshold) aiControl.aiState = AIState.Chasing;
-            else aiControl.aiState = AIState.Fighting;
-
-            if (aiControl.aiState == AIState.Fighting && !aboutToAttack) StartCoroutine(AboutToAttack());
+            float dist = target.transform.position.x - transform.position.x;
+            FacePlayer(dist);
+            Debug.Log(dist);
+            if (Mathf.Abs(dist) > maxAttackDist) aiControl.aiState = AIState.Chasing;
+            else if (!aboutToAttack) StartCoroutine(AboutToAttack());
         }
-	}
+    }
 
     public void FacePlayer(float dist)
     {
@@ -56,6 +53,7 @@ public class AIAttack : AIBase {
 
     IEnumerator AboutToAttack()
     {
+
         aboutToAttack = true;
         attackDelay = Random.Range(attackDelayInterval.start, attackDelayInterval.end);
 
@@ -73,7 +71,7 @@ public class AIAttack : AIBase {
     void Attack()
     {
         float dist = target.transform.position.x - transform.position.x;
-        if (Mathf.Abs(dist) < attackDistTreshold) aiControl.actionsQueue.Enqueue(ActionType.Attack);
+        if (Mathf.Abs(dist) < maxAttackDist) aiControl.actionsQueue.Enqueue(ActionType.Attack);
         else aiControl.aiState = AIState.Chasing;
     }
 }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class FieldOfView2D : MonoBehaviour
 {
 
-    public float viewRadius;
+    public float viewRadius = 10f;
     [Range(0, 360)]
-    public float viewAngle;
+    public float viewAngle = 180f;
     public float viewDelay = .2f;
 
     public LayerMask targetMask;
