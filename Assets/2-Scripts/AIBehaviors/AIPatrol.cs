@@ -49,7 +49,7 @@ public class AIPatrol : AIBase {
     }
 
     public void MovePatroller(Vector2 moveAmount)
-    {
+    {        
         Vector2 velocity = aiControl.ApplyPhysics(moveAmount / Time.deltaTime);
         velocity.y = 0;
         aiControl.Move(velocity * Time.deltaTime);

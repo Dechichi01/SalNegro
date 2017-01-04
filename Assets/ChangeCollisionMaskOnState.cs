@@ -5,6 +5,7 @@ public class ChangeCollisionMaskOnState : StateMachineBehaviour {
 
     LayerMask maskInNormalState;
     public LayerMask maskOnState;
+    public bool invincible = false;
 
     public bool reverse = false;
     [Range(0,1)]
@@ -18,6 +19,9 @@ public class ChangeCollisionMaskOnState : StateMachineBehaviour {
         maskInNormalState = controller.collisionMask;
 
         controller.collisionMask = maskOnState;
+
+        if (invincible)
+            controller.coll.gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -33,6 +37,8 @@ public class ChangeCollisionMaskOnState : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         controller.collisionMask = maskInNormalState;
+        if (invincible)
+            controller.coll.gameObject.layer = LayerMask.NameToLayer("Player");
         reversed = false;
     }
 
