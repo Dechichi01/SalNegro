@@ -35,7 +35,7 @@ public class MisticalPickup : Pickup {
         shineEnabled = false;
         transform.GetChild(0).gameObject.SetActive(false);
         Debug.Log(hit.transform.root.name);
-        hit.transform.root.GetChild(0).GetChild(4).gameObject.SetActive(true);
+        hit.transform.root.GetComponent<Character2D>().equippedWeapon.gameObject.SetActive(true);
         StartCoroutine(VanishLight());
     }
 

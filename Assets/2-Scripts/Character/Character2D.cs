@@ -27,7 +27,7 @@ public class Character2D : LivingEntity {
     float jumpVelocity;
 
     //Weapons
-
+    public Weapon equippedWeapon;
     //
 
     float velocityXSmooth;
@@ -49,6 +49,9 @@ public class Character2D : LivingEntity {
         base.Start();
         animControl = GetComponent<AnimController2D>();
         controller = GetComponent<Controller2D>();
+
+        if (equippedWeapon)
+            equippedWeapon.enabled = false;
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -83,7 +86,18 @@ public class Character2D : LivingEntity {
 
     public virtual void Attack()
     {
+        if (equippedWeapon)
+        {
+            equippedWeapon.enabled = true;
+            StartCoroutine(DisableWeapon());
+        }
+        animControl.Attack();
+    }
 
+    IEnumerator DisableWeapon()
+    {
+        yield return new WaitForSeconds(2f);
+        equippedWeapon.enabled = false;
     }
 
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
@@ -95,6 +109,8 @@ public class Character2D : LivingEntity {
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
+        Debug.Log(gameObject.name);
+        animControl.TakeHit();
     }
 
     public override void Die()
@@ -109,7 +125,7 @@ public class Character2D : LivingEntity {
         {
             case ActionType.Attack:
                 if (states.canAttack)
-                    animControl.Attack();
+                    Attack();
                 break;
             case ActionType.Roll:
                 if (states.grounded)

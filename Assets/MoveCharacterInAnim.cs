@@ -22,7 +22,6 @@ public class MoveCharacterInAnim : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log(stateInfo.normalizedTime);
         x = movementCurveX.Evaluate(stateInfo.normalizedTime)*sign*multiplierX;
         y = movementCurveY.Evaluate(stateInfo.normalizedTime)*multiplierY;
 

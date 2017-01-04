@@ -74,7 +74,7 @@ public class AIPatrol : AIBase {
         percent += Time.deltaTime * speed / distance;
         percent = Mathf.Clamp01(percent);
         Vector2 newPos = Vector2.Lerp(start, end, Ease(percent));
-        newPos.y = 0;
+        newPos.y = end.y;
         return newPos;
     }
 

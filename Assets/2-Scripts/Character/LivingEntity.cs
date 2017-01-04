@@ -28,6 +28,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     {
         health -= damage;
 
+        Debug.Log(gameObject.name);
         if (health <= 0 && !dead)
         {
             Die();

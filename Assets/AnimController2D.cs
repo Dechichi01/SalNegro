@@ -70,6 +70,11 @@ public class AnimController2D : MonoBehaviour {
         StartCoroutine(MovePlayerToClimbPos(startClimbPos));
     }
 
+    public void TakeHit()
+    {
+        anim.SetInteger("hit", Random.Range(1, 3));
+    }
+
     public void Die()
     {
         anim.SetTrigger("die");
