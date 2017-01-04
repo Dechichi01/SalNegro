@@ -153,20 +153,11 @@ public class Character2D : LivingEntity {
     {
         moveInput = _moveInput;
 
-        states.grounded = controller.collisions.below;
-
-        //Not accumulate gravity
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            if (controller.collisions.slidingDownMaxSlope)
-                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
-            else
-                velocity.y = 0;
-        }
-
         //Calculate velocity.x
         float targetVX = moveSpeed * moveInput.x;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVX, ref velocityXSmooth, states.grounded ? accTimeGround : accTimeAir);
+
+       velocity = ApplyPhysics(velocity);
 
         //Calculate velocity.y
         if (moveInput.y > 0)//Jump
@@ -183,11 +174,26 @@ public class Character2D : LivingEntity {
                 velocity.y = moveInput.y * jumpVelocity;
         }
 
+        return velocity * Time.deltaTime;
+    }
+
+    public Vector2 ApplyPhysics(Vector2 velocity)
+    {
+        states.grounded = controller.collisions.below;
+
+        //Not accumulate gravity
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            if (controller.collisions.slidingDownMaxSlope)
+                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
+            else
+                velocity.y = 0;
+        }
+
         if (states.useGravity)
             velocity.y += gravity * Time.deltaTime;
 
-
-        return velocity * Time.deltaTime;
+        return velocity;
     }
 
 }

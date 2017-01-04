@@ -42,12 +42,18 @@ public class AIPatrol : AIBase {
     {
         if (aiControl.aiState == AIState.Patrolling)
         {
-            if (patrolStarted) aiControl.Move(CalculateMovement());
+            if (patrolStarted) MovePatroller(CalculateMovement());
             else if (!startingPatrol) StartCoroutine(MoveToFirstPatrolPoint());
         }
         else patrolStarted = false ;
     }
 
+    public void MovePatroller(Vector2 moveAmount)
+    {
+        Vector2 velocity = aiControl.ApplyPhysics(moveAmount / Time.deltaTime);
+        velocity.y = 0;
+        aiControl.Move(velocity * Time.deltaTime);
+    }
     IEnumerator MoveToFirstPatrolPoint()
     {
         startingPatrol = true;
@@ -60,7 +66,7 @@ public class AIPatrol : AIBase {
         {
             Debug.Log(percent);
             Vector2 newPos = LerpBetweenPoints(start, end, ref percent, dist);
-            aiControl.Move(newPos - (Vector2) aiControl.transform.position);
+            MovePatroller(newPos - (Vector2) aiControl.transform.position);
             yield return new WaitForEndOfFrame();
         }
 
