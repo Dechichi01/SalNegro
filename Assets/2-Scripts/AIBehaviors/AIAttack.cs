@@ -35,7 +35,6 @@ public class AIAttack : AIBase {
             nextCheckTime = Time.time + aiControl.aiCycleTime;
             float dist = target.transform.position.x - transform.position.x;
             FacePlayer(dist);
-            Debug.Log(dist);
             if (Mathf.Abs(dist) > maxAttackDist) aiControl.aiState = AIState.Chasing;
             else if (!aboutToAttack) StartCoroutine(AboutToAttack());
         }
@@ -53,7 +52,6 @@ public class AIAttack : AIBase {
 
     IEnumerator AboutToAttack()
     {
-
         aboutToAttack = true;
         attackDelay = Random.Range(attackDelayInterval.start, attackDelayInterval.end);
 

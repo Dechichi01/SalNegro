@@ -45,7 +45,6 @@ public class AIController2D : Character2D {
         animControl.Turn();
     }
 
-
 }
 
 public enum AIState

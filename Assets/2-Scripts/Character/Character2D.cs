@@ -25,6 +25,9 @@ public class Character2D : LivingEntity {
 
     float gravity;
     float jumpVelocity;
+
+    //Weapons
+
     //
 
     float velocityXSmooth;
@@ -76,6 +79,11 @@ public class Character2D : LivingEntity {
             }
         }
         animControl.Move(deltaPos, states.facingRight);
+    }
+
+    public virtual void Attack()
+    {
+
     }
 
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
