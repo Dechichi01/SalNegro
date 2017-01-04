@@ -54,6 +54,7 @@ public class AIPatrol : AIBase {
         velocity.y = 0;
         aiControl.Move(velocity * Time.deltaTime);
     }
+
     IEnumerator MoveToFirstPatrolPoint()
     {
         startingPatrol = true;
